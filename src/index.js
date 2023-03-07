@@ -9,10 +9,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set('views', __dirname + '/app/views/')
-app.use(express.static(path.join(__dirname,'/app/views/')))
+const db = require("./db");
+
+//Connect to db
+db.connect();
 
 app.get('/', (req, res) => {
   res.render('index');
