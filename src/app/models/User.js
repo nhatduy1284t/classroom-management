@@ -1,29 +1,19 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    user_id: { type: String },
-    username: { type: String },
-    password: { type: String },
-    first_name: { type: String },
-    last_name: { type: String },
-    type: { type: String },
-    joined_date: { type: Date },
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
+    type: { type: Number, required: true },
+    joined_date: { type: Date, required: true },
   },
-  { collection: "user" }
+  
 );
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema, "users");
 
-User.createUser = (user) => {
-  
-}
-module.exports = User;
-
-/*
-  Example of use in other file
-  const testUser = require("./app/models/User");
-  const result = await testUser.find({});
-  console.log(result); // 'hello'
-*/
+export default User;

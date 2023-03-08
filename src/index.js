@@ -1,34 +1,45 @@
-const express = require("express");
-const app = express();
+import dotenv from 'dotenv'
+dotenv.config();
 
-const db = require("./db");
+import express from "express";
+
+import { engine } from 'express-handlebars';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import db from './db/db.js'
+
+import userRoutes from './routes/users.route.js';
+import authRoutes from './routes/auth.route.js';
+
 
 //Connect to db
-db.connect();
+db();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const port = process.env.PORT || 3000;
 
 
-app.get("/", (req, res) => {
-  console.log("da co nguoi request");
-  // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  // Request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  res.json(dogs);
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', __dirname + '/app/views/');
+
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded()); // for parsing application/x-www-form-urlencoded
+
+app.use(express.static('src/app/views/assets'));
+
+app.get('/', (req, res) => {
+  res.render('index');
 });
 
-app.get("/dogs", async (req, res) => {
-  res.json({})
-});
+app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
 
-app.listen(3000);
+
+
+app.listen(port, () => console.log(`Example app listening at ${port}`));
+
