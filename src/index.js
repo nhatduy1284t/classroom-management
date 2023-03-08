@@ -6,10 +6,6 @@ const db = require("./db");
 //Connect to db
 db.connect();
 
-const dogs = [
-  { name: "Jimmy", age: 12 },
-  { name: "Johnny", age: 32 },
-];
 
 app.get("/", (req, res) => {
   console.log("da co nguoi request");
@@ -32,10 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/dogs", async (req, res) => {
-  const testUser = require("./app/models/User");
-  const result = await testUser.find({});
-  console.log(result); // 'hello'
-  res.json(result);
+  res.json({})
 });
 
 app.listen(3000);

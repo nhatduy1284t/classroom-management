@@ -3,10 +3,27 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
+    user_id: { type: String },
+    username: { type: String },
     password: { type: String },
+    first_name: { type: String },
+    last_name: { type: String },
+    type: { type: String },
+    joined_date: { type: Date },
   },
   { collection: "user" }
 );
 
-module.exports = mongoose.model("user", userSchema);
+const User = mongoose.model("user", userSchema);
+
+User.createUser = (user) => {
+  
+}
+module.exports = User;
+
+/*
+  Example of use in other file
+  const testUser = require("./app/models/User");
+  const result = await testUser.find({});
+  console.log(result); // 'hello'
+*/
