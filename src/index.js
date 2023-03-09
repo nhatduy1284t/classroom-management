@@ -11,6 +11,7 @@ import db from './db/db.js'
 
 import userRoutes from './routes/users.route.js';
 import authRoutes from './routes/auth.route.js';
+import classRoutes from './routes/class.route.js';
 
 
 //Connect to db
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', userRoutes);
+app.use('/class', classRoutes);
 app.use('/auth', authRoutes);
 
 

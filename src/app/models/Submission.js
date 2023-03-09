@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const submissionSchema = new Schema(
@@ -12,4 +13,5 @@ const submissionSchema = new Schema(
 );
 
 const Submission = mongoose.model("submission", submissionSchema);
-module.exports = Submission;
+// module.exports = Submission;
+export default Submission;
