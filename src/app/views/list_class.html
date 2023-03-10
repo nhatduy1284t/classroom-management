@@ -153,10 +153,10 @@
                               <h4 class="modal-title" id="myModalLabel">New class</h4>
                           </div>
                           <div class="modal-body">
-                            <form role="form">
+                            <form id="create-class-form"role="form">
                               <div class="form-group">
                                 <label>Course name</label>
-                                <input class="form-control" placeholder="PLease enter the course name." />
+                                <input id="course-name" class="form-control" placeholder="PLease enter the course name." />
                               </div>
                               <div class="form-group">
                                 <label>Start date</label>
@@ -168,13 +168,13 @@
                               </div>
                               <div class="form-group">
                                 <label>Description</label>
-                                <input class="form-control" placeholder="A short description (if any), approx 100 words." />
+                                <input id="course-desctiption" class="form-control" placeholder="A short description (if any), approx 100 words." />
                               </div>
-                          </form>
+                            </form>
                           </div>
                           <div class="modal-footer">
                               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-success">Create</button>
+                              <button id="create-class-btn" type="submit" class="btn btn-success">Create</button>
                           </div>
                       </div>
                   </div>

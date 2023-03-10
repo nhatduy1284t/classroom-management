@@ -39,6 +39,28 @@ function checkDate() {
             }
 }
 
+// Create button: after pressed
+const createButton = document.querySelector('#create-class-btn');
+
+createButton.addEventListener('click', function(event) {
+  event.preventDefault(); // prevent form submission
+
+  // Get references to the input elements
+  const courseNameInput = document.querySelector('#course-name');
+  const startDateInput = document.querySelector('#start-datepicker');
+  const endDateInput = document.querySelector('#end-datepicker');
+  const descriptionInput = document.querySelector('#course-description');
+
+  // Check if any input is empty
+  if (!courseNameInput.value || !startDateInput.value || !endDateInput.value || !descriptionInput.value) {
+    alert('Please fill in all fields.');
+    return;
+  }
+
+  // All inputs are filled, continue with form submission
+  console.log('Form submitted');
+});
+
 
 // After js file is loaded.
 console.log("custom javascript is loaded!");
