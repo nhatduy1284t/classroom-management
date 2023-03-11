@@ -1,34 +1,85 @@
-<div class="container">
-    <h2>Sign Up Form</h2>
-    <form action="/users/create", method="POST", enctype="application/x-www-form-urlencoded">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
-        </div>
-        <div class="form-group">
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" class="form-control" id="confirm_password" placeholder="Confirm password" name="confirm_password">
-        </div>
-        <div class="form-group">
-            <label for="first_name">First name:</label>
-            <input type="text" class="form-control" id="first_name" placeholder="" name="first_name">
-        </div>
-        <div class="form-group">
-            <label for="last_name">Last name:</label>
-            <input type="text" class="form-control" id="last_name" placeholder="" name="last_name">
-        </div>
-        <div class="form-group">
-            <label for="confirm_password">Type:</label>
-            <select type="type" class="form-control" id="type" placeholder="Confirm password" name="type">
-                <option value=""></option>
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+<div class="container w-100">
+  <h2>Sign Up Form</h2>
+  <form
+    action="/users/create"
+    ,
+    method="POST"
+    ,
+    enctype="application/x-www-form-urlencoded"
+  >
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        placeholder="Enter username"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        placeholder="Enter password"
+        name="password"
+      />
+    </div>
+    <div class="form-group">
+      <label for="confirm_password">Confirm Password:</label>
+      <input
+        type="password"
+        class="form-control"
+        id="confirm_password"
+        placeholder="Confirm password"
+        name="confirm_password"
+      />
+    </div>
+    <div class="form-group">
+      <label for="first_name">First name:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="first_name"
+        placeholder="First name"
+        name="first_name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="last_name">Last name:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="last_name"
+        placeholder="Last name"
+        name="last_name"
+      />
+    </div>
+    <div class="form-group">
+      <label for="confirm_password">Type:</label>
+      <select
+        type="type"
+        class="form-control"
+        id="type"
+        placeholder="Confirm password"
+        name="user_type"
+      >
+        {{! <option value=""></option> }}
+        <option value="0" selected>Student</option>
+        <option value="1">Teacher</option>
+        <option value="2">Admin</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 </div>
+
+{{#if usernameCreated}}
+  <script id="alert-script" data="{{usernameCreated}}">
+    let tag= document.querySelector('#alert-script');
+    console.log(tag.getAttribute('data'))
+    alert(`${tag.getAttribute('data')} is created successfully`)
+  </script>
+{{/if}}

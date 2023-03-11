@@ -20,6 +20,21 @@ classController.createClass = async (req, res) => {
   }
 };
 
+classController.getClasses = async (req, res) => {
+  try {
+    //Check if it's an admin
+    
+    //then create
+    let postClass = req.body;
+
+    const classroom = new Class(postClass);
+
+    const result = await classroom.save();
+    res.json(result);
+  } catch (error) {
+    console.log(error)
+  }
+};
 
 
 

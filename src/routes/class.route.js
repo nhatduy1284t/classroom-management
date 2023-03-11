@@ -8,5 +8,5 @@ classRouter.post('/assignment/create', assignmentController.createAssignment);
 classRouter.post('/assignment/submit', assignmentController.submitAssignment);
 classRouter.post('/create', classController.createClass);
 
-
+classRouter.get('/', classController.getClasses)
 export default classRouter;
