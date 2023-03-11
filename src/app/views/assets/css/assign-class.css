@@ -1,0 +1,10 @@
+.btn-totheRight {
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.btn-totheRight button {
+    margin-left: auto;
+    margin-right: 20px;
+}
