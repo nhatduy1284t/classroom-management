@@ -1,0 +1,83 @@
+// Turning normal table into responsive, interactive table
+$(document).ready(function () {
+    $('.table').DataTable({
+        // "autoWidth": true,
+        // "lengthMenu": [[25, 50, -1], [25, 50, "All"]],
+        "paging": false,
+        "info": false,
+        "ordering": false
+    }
+    );
+});
+console.log("table created");
+
+// "Click" event for remove buttons
+let removeBtns = document.querySelectorAll(".remove-btn");
+removeBtns.forEach(function (btn) {
+    btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        var confirmRemove = confirm("Are you sure you want to remove?");
+
+        // if the user confirms, remove the element
+        if (confirmRemove) {
+            // do something to remove the element
+            console.log("Remove button clicked");
+        }
+
+        // reload the page after the confirmation
+    });
+});
+
+//Reference: https://www.codinglabweb.com/2022/07/multiple-options-select-menu-javascript.html
+const selectBtn = document.querySelector(".select-btn"),
+    items = document.querySelectorAll(".item");
+
+// selectBtn.addEventListener("click", () => {
+//     selectBtn.classList.toggle("open");
+// });
+
+items.forEach(item => {
+    item.addEventListener("click", () => {
+        item.classList.toggle("checked");
+
+        // let checked = document.querySelectorAll(".checked"),
+        //     btnTexts = document.querySelector(".btn-text");
+        let teacherModal = document.querySelector("#teacherModal");
+        let studentModal = document.querySelector("#studentModal");
+        let teacherModalDisplay = window.getComputedStyle(teacherModal).getPropertyValue("display");
+        if (teacherModalDisplay != "none") {
+            // TEACHER MODAL
+            let checked = teacherModal.querySelectorAll(".checked"),
+                btnText = teacherModal.querySelector(".btn-text");
+
+            if (checked && checked.length > 0) {
+                btnText.innerText = `${checked.length} Selected`;
+            } else {
+                btnText.innerText = "Please select teacher to assign";
+            }
+        }
+        else {
+            // STUDENT MODAL
+            let checked = studentModal.querySelectorAll(".checked"),
+                btnText = studentModal.querySelector(".btn-text");
+
+            if (checked && checked.length > 0) {
+                btnText.innerText = `${checked.length} Selected`;
+            } else {
+                btnText.innerText = "Please select student to add";
+            }
+        };
+    })
+});
+
+
+// Turn list into searchable list.
+var options = {
+    valueNames: ['checkbox', 'item-text']
+};
+
+var teacherList = new List('teacher-list', options);
+var studentList = new List('student-list', options);
+
+// ====NOTE====
+// TO CHECK IF THE item is selected or not, check to see if the class of tag <i> has "checked" in it
