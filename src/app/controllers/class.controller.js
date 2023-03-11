@@ -7,35 +7,34 @@ var classController = {};
 classController.createClass = async (req, res) => {
   try {
     //Check if it's an admin
-    
+
     //then create
     let postClass = req.body;
-
     const classroom = new Class(postClass);
-
     const result = await classroom.save();
-    res.json(result);
+    res.redirect("/class");
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
 classController.getClasses = async (req, res) => {
   try {
     //Check if it's an admin
-    
+
     //then create
-    let postClass = req.body;
+    let classes = await Class.find();
 
-    const classroom = new Class(postClass);
+    classes = classes.map((model) => {
+      model._doc.start_date = (new Date(model._doc.start_date)).toLocaleDateString('en-GB')
+      model._doc.end_date = (new Date(model._doc.end_date)).toLocaleDateString('en-GB')
+      return model._doc
+    })
 
-    const result = await classroom.save();
-    res.json(result);
+    res.render("classes/classes", { classes: classes });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
-
-
 
 export default classController;

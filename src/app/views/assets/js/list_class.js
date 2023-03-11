@@ -41,9 +41,9 @@ function checkDate() {
 
 // Create button: after pressed
 const createButton = document.querySelector('#create-class-btn');
-
+const createClassForm = document.querySelector('#create-class-form');
 createButton.addEventListener('click', function (event) {
-    event.preventDefault(); // prevent form submission
+    // event.preventDefault(); // prevent form submission
 
     // Get references to the input elements
     const courseNameInput = document.querySelector('#course-name');
@@ -52,13 +52,14 @@ createButton.addEventListener('click', function (event) {
     const descriptionInput = document.querySelector('#course-description');
 
     // Check if any input is empty
-    if (!courseNameInput.value || !startDateInput.value || !endDateInput.value || !descriptionInput.value) {
+    if (!courseNameInput.value || !startDateInput.value || !endDateInput.value) {
         alert('Please fill in all fields.');
         return;
     }
 
     // All inputs are filled, continue with form submission
     console.log('Form submitted');
+    createClassForm.submit()
 });
 
 
