@@ -1,0 +1,343 @@
+<link href="/css/custom.css" rel="stylesheet" />
+<link href="/css/assign-class.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="/js/dataTables/dataTables.bootstrap.css" />
+{{! Test }}
+<form method="post" action="/class/{{classroom._id}}/assign">
+  <h2>Select Students:</h2>
+  <ul>
+    <li><label><input type="checkbox" name="teachers[]" value="123" />
+        Student 1</label></li>
+    <li><label><input type="checkbox" name="teachers[]" value="321" />
+        Student 2</label></li>
+    <li><label><input type="checkbox" name="teachers[]" value="323" />
+        Student 3</label></li>
+    <li><label><input type="checkbox" name="teachers[]" value="123123" />
+        Student 4</label></li>
+  </ul>
+  <button type="submit">Submit</button>
+</form>
+{{! end test }}
+<!--Content starts here-->
+<h1>Class: {{classroom.class_name}}</h1>
+<div class="row">
+  <div class="col-md-12">
+    <!--    Hover Rows  -->
+    <div class="panel panel-default">
+      <div class="panel-heading" style="font-size: 16px">
+        <div class="panel-heading-title">Teachers</div>
+        <div class="panel-heading-btn">
+          <button
+            class="btn btn-success btn-md"
+            data-toggle="modal"
+            data-target="#teacherModal"
+          >
+            Assign new teacher
+          </button>
+          <div
+            class="modal fade"
+            id="teacherModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                          </button> -->
+                  <h4 class="modal-title" id="myModalLabel">
+                    Assign teacher to class
+                  </h4>
+                </div>
+                <div id="teacher-list" class="modal-body">
+                  <input class="fuzzy-search" placeholder="Search student" />
+                  <!-- Reference: https://www.codinglabweb.com/2022/07/multiple-options-select-menu-javascript.html -->
+                  <div class="select-btn open">
+                    <span class="btn-text">Please select teacher to assign</span>
+                  </div>
+             
+                    <ul class="list list-items">
+                      {{#each teachers}}
+                        <li class="item">
+                          <span class="checkbox">
+                            <i class="fa-solid fa-check check-icon"></i>
+                          </span>
+                          <span class="item-text">{{first_name}}
+                            {{last_name}}</span>
+                        </li>
+                      {{/each}}
+                    </ul>
+            
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    id="assign-class-teacher-btn"
+                    type="submit"
+                    class="btn btn-success"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table id="teacher-table" class="table table-hover display">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Contact</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Dr Mee Loong (Bobby) Yang</td>
+                <td>bobby.yang@aut.ac.nz</td>
+                <td>
+                  <form action="" method="POST" style="display: flex">
+                    <button class="btn btn-danger remove-btn">
+                      <i class="fa fa-user-times"></i>
+                      Remove
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>Dr Mee Loong (Bobby) Yang</td>
+                <td>bobby.yang@aut.ac.nz</td>
+                <td>
+                  <form action="" method="POST" style="display: flex">
+                    <button class="btn btn-danger remove-btn">
+                      <i class="fa fa-user-times"></i>
+                      Remove
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>Dr Mee Loong (Bobby) Yang</td>
+                <td>bobby.yang@aut.ac.nz</td>
+                <td>
+                  <form action="" method="POST" style="display: flex">
+                    <button class="btn btn-danger remove-btn">
+                      <i class="fa fa-user-times"></i>
+                      Remove
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>Dr Mee Loong (Bobby) Yang</td>
+                <td>bobby.yang@aut.ac.nz</td>
+                <td>
+                  <form action="" method="POST" style="display: flex">
+                    <button class="btn btn-danger remove-btn">
+                      <i class="fa fa-user-times"></i>
+                      Remove
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- End  Hover Rows  -->
+  </div>
+  <!-- /. ROW  -->
+</div>
+
+<!-- STUDENT LIST -->
+<div class="row">
+  <div class="col-md-12">
+    <!--    Hover Rows  -->
+    <div class="panel panel-default">
+      <div class="panel-heading" style="font-size: 16px">
+        <div class="panel-heading-title">Students</div>
+        <div class="panel-heading-btn">
+          <button
+            class="btn btn-success btn-md"
+            data-toggle="modal"
+            data-target="#studentModal"
+          >
+            Add new student
+          </button>
+          <div
+            class="modal fade"
+            id="studentModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                          </button> -->
+                  <h4 class="modal-title" id="myModalLabel">
+                    Add student to class
+                  </h4>
+                </div>
+                <div id="student-list" class="modal-body">
+                  <input class="fuzzy-search" placeholder="Search student" />
+                  <!-- Reference: https://www.codinglabweb.com/2022/07/multiple-options-select-menu-javascript.html -->
+                  <div class="select-btn open">
+                    <span class="btn-text">Please select student to add</span>
+                    <!-- <span class="arrow-dwn">
+                              <i class="fa-solid fa-chevron-down"></i>
+                            </span> -->
+                  </div>
+                  <ul class="list list-items">
+                    {{#each students}}
+                      {{!-- <li class="item">
+                        <span class="checkbox">
+                          <i class="fa-solid fa-check check-icon"></i>
+                        </span>
+                        <span class="item-text">{{first_name}}
+                          {{last_name}}</span>
+                      </li> --}}
+                      <li class="item">
+                        <span class="checkbox">
+                          <i class="fa-solid fa-check check-icon"></i>
+                        </span>
+                        <span class="item-text">{{first_name}}
+                          {{last_name}}</span>
+                      </li>
+
+                    {{/each}}
+                  </ul>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    id="create-class-btn"
+                    type="submit"
+                    class="btn btn-success"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table id="student-table" class="table table-hover display">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2059035</td>
+                <td>Nguyen Khac Anh Quan</td>
+                <td>2059035@itec.hcmus.edu.vn</td>
+                <td>
+                  <form action="" method="POST" style="display: flex">
+                    <button class="btn btn-danger remove-btn">
+                      <i class="fa fa-user-times"></i>
+                      Remove
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>2059035</td>
+                <td>Nguyen Khac Anh Quan</td>
+                <td>2059035@itec.hcmus.edu.vn</td>
+                <td>
+                  <form action="" method="POST" style="display: flex">
+                    <button class="btn btn-danger remove-btn">
+                      <i class="fa fa-user-times"></i>
+                      Remove
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>2059035</td>
+                <td>Nguyen Khac Anh Quan</td>
+                <td>2059035@itec.hcmus.edu.vn</td>
+                <td>
+                  <form action="" method="POST" style="display: flex">
+                    <button class="btn btn-danger remove-btn">
+                      <i class="fa fa-user-times"></i>
+                      Remove
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>2059035</td>
+                <td>Nguyen Khac Anh Quan</td>
+                <td>2059035@itec.hcmus.edu.vn</td>
+                <td>
+                  <form action="" method="POST" style="display: flex">
+                    <button class="btn btn-danger remove-btn">
+                      <i class="fa fa-user-times"></i>
+                      Remove
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- End  Hover Rows  -->
+  </div>
+  <!-- /. ROW  -->
+</div>
+
+<!-- /. WRAPPER  -->
+<!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+<!-- JQUERY SCRIPTS -->
+<script src="/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/js/jquery.metisMenu.js"></script>
+
+<!-- DATATABLES -->
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="/js/dataTables/jquery.dataTables.js"></script>
+<script src="/js/dataTables/dataTables.bootstrap.js"></script>
+
+<!-- LIST.JS -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"
+></script>
+
+<!-- CUSTOM SCRIPTS -->
+<script src="/js/custom.js"></script>
+<script src="/js/assign-class.js"></script>

@@ -8,7 +8,8 @@ const classSchema = new Schema(
     start_date: { type: Date },
     end_date: { type: Date },
     last_name: { type: Date },
-    teacher_id: { type: String },
+    teacher_id: [{ type: String }],
+    // teacher_id: [{ type: String }],
   },
   { collection: "class" }
 );
