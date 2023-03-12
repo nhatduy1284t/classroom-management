@@ -95,7 +95,7 @@ font-size: 40px;
 border-radius: 50px;
 
 }
-    .bg-color-green {
+.bg-color-green {
 background-color: #00CE6F;
 color: #fff;
 }
@@ -376,4 +376,7 @@ line-height: 1.428571429;
    
 }
 
-
+/* Custom */
+.w-100 {
+    width:100%;
+}
