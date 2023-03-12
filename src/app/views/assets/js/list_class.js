@@ -17,7 +17,7 @@ function checkDate() {
 
     if (start.value !== "") {
         // Check start date with today
-        if (startDate < today) {
+        if (startDate <= today) {
             alert("Date must be in the future!");
             start.value = "";
         }
@@ -33,7 +33,7 @@ function checkDate() {
     else
         if (end.value !== "")
             // Check end date with today
-            if (endDate < today) {
+            if (endDate <= today) {
                 alert("Date must be in the future!");
                 end.value = "";
             }
