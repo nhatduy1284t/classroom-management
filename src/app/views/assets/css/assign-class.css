@@ -175,3 +175,12 @@ input.fuzzy-search {
     /* border: hidden; */
     font-size: 16px;
 }
+
+input.checkbox {
+    margin-top: 2px;
+}
+
+ul.list {
+    overflow: scroll;
+    max-height: 300px;
+}

@@ -38,7 +38,13 @@ const selectBtn = document.querySelector(".select-btn"),
 
 items.forEach(item => {
     item.addEventListener("click", () => {
+        //Click anywhere within the list item, the item will always be checked/unchecked
         item.classList.toggle("checked");
+
+        let item_checkbox = item.querySelector(".checkbox");
+        item_checkbox.checked = !item_checkbox.checked;
+        console.log(item_checkbox);
+        
 
         // let checked = document.querySelectorAll(".checked"),
         //     btnTexts = document.querySelector(".btn-text");
