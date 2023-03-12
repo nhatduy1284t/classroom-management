@@ -104,12 +104,16 @@ body {
     padding: 16px;
     background-color: #fff;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    display: none;
-}
-
-.select-btn.open~.list-items {
     display: block;
 }
+
+/* .select-btn.open~.list-items {
+    display: block;
+} */
+
+/* .select-btn.open~.add-form {
+    display: block;
+} */
 
 .list-items .item {
     display: flex;

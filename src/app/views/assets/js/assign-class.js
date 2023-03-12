@@ -87,3 +87,19 @@ var studentList = new List('student-list', options);
 
 // ====NOTE====
 // TO CHECK IF THE item is selected or not, check to see if the class of tag <i> has "checked" in it
+
+let add_teachers_btn = document.querySelector("#add-teachers");
+add_teachers_btn.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    let teacher_form = document.querySelector("#teachers-form");
+    teacher_form.submit();
+});
+
+let add_students_btn = document.querySelector("#add-students");
+add_students_btn.addEventListener("click", (event) => {
+    event.preventDefault();
+    
+    let student_form = document.querySelector("#students-form");
+    student_form.submit();
+});

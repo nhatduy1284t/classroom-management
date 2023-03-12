@@ -131,7 +131,7 @@
                           <h4 class="modal-title" id="myModalLabel">Assign teacher to class</h4>
                         </div>
                         <div id="teacher-list" class="modal-body">
-                          <input class="fuzzy-search" placeholder="Search student"/>
+                          <input class="fuzzy-search" placeholder="Search student" />
                           <!-- Reference: https://www.codinglabweb.com/2022/07/multiple-options-select-menu-javascript.html -->
                           <div class="select-btn open">
                             <span class="btn-text">Please select teacher to assign</span>
@@ -139,32 +139,30 @@
                               <i class="fa-solid fa-chevron-down"></i>
                             </span> -->
                           </div>
-                          <ul class="list list-items">
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Petteri Kaskenpalo</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Bobby Yang</span>
-                            </li>
-                          </ul>
+                          <form id="teachers-form" action="" method="POST">
+                            <ul class="list list-items">
+                              <li class="item">
+                                <input class="checkbox" name="teachers[]" type="checkbox" value="Petteri Kaskenpalo" autocomplete="off">
+                                <!-- <span class="checkbox">
+                                  <i class="fa-solid fa-check check-icon"></i>
+                                </span> -->
+                                <span class="item-text">Petteri Kaskenpalo</span>
+                              </li>
+                              <li class="item">
+                                <input class="checkbox" name="teachers[]" type="checkbox" value="Bobby Yang" autocomplete="off">
+                                <!-- <span class="checkbox">
+                                  <i class="fa-solid fa-check check-icon"></i>
+                                </span> -->
+                                <span class="item-text">Bobby Yang</span>
+                              </li>
+                            </ul>
+                          </form>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">
                             Close
                           </button>
-                          <button id="create-class-btn" type="submit" class="btn btn-success">
+                          <button id="add-teachers" type="submit" class="btn btn-success">
                             Add
                           </button>
                         </div>
@@ -252,7 +250,7 @@
                           <h4 class="modal-title" id="myModalLabel">Add student to class</h4>
                         </div>
                         <div id="student-list" class="modal-body">
-                          <input class="fuzzy-search" placeholder="Search student"/>
+                          <input class="fuzzy-search" placeholder="Search student" />
                           <!-- Reference: https://www.codinglabweb.com/2022/07/multiple-options-select-menu-javascript.html -->
                           <div class="select-btn open">
                             <span class="btn-text">Please select student to add</span>
@@ -260,122 +258,44 @@
                               <i class="fa-solid fa-chevron-down"></i>
                             </span> -->
                           </div>
-                          <ul class="list list-items">
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Trinh Nhat Duy</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Phu Thanh</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Quoc Thu</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                            <li class="item">
-                              <form action="" method="POST">
-                                <input class="checkbox" type="checkbox">
-                              </form>
-                              <!-- <span class="checkbox">
-                                <i class="fa-solid fa-check check-icon"></i>
-                              </span> -->
-                              <span class="item-text">Nguyen Tran Tuan Kiet</span>
-                            </li>
-                          </ul>
+                          <form id="students-form" class="add-form" action="" method="POST">
+                            <ul class="list list-items">
+                              <li class="item">
+                                <input class="checkbox" name="students[]" type="checkbox" value="Trinh Nhat Duy" autocomplete="off">
+                                <!-- <span class="checkbox">
+                                  <i class="fa-solid fa-check check-icon"></i>
+                                </span> -->
+                                <span class="item-text">Trinh Nhat Duy</span>
+                              </li>
+                              <li class="item">
+                                <input class="checkbox" name="students[]" type="checkbox" value="Nguyen Phu Thanh" autocomplete="off">
+                                <!-- <span class="checkbox">
+                                  <i class="fa-solid fa-check check-icon"></i>
+                                </span> -->
+                                <span class="item-text">Nguyen Phu Thanh</span>
+                              </li>
+                              <li class="item">
+                                <input class="checkbox" name="students[]" type="checkbox" value="Nguyen Quoc Thu" autocomplete="off">
+                                <!-- <span class="checkbox">
+                                  <i class="fa-solid fa-check check-icon"></i>
+                                </span> -->
+                                <span class="item-text">Nguyen Quoc Thu</span>
+                              </li>
+                              <li class="item">
+                                <input class="checkbox" name="students[]" type="checkbox" value="Nguyen Tran Tuan Kiet" autocomplete="off">
+                                <!-- <span class="checkbox">
+                                  <i class="fa-solid fa-check check-icon"></i>
+                                </span> -->
+                                <span class="item-text">Nguyen Tran Tuan Kiet</span>
+                              </li>
+                            </ul>
+                          </form>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">
                             Close
                           </button>
-                          <button id="create-class-btn" type="submit" class="btn btn-success">
+                          <button id="add-students" type="submit" class="btn btn-success">
                             Add
                           </button>
                         </div>
