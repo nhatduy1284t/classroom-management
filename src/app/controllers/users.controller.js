@@ -11,8 +11,7 @@ controller.index = async (req, res) => {
 };
 
 controller.getCreateUser = (req, res) => {
-  let user = req.signedCookies.user_info;
-  res.render("users/signup", { user });
+  res.render("users/signup");
 };
 
 controller.signup = (req, res) => {

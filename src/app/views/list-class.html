@@ -1,8 +1,7 @@
-{{!-- {{{classes}}} --}}
-
-<!-- ============ NOTE! ============ -->
+﻿<!-- ============ NOTE! ============ -->
 <!-- This HTML can be used with any type of users' views (Student, Teacher, Admin). -->
 <!-- Student, Teacher: Remove the add new class button -->
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -175,7 +174,9 @@
                           </div>
                           <div class="modal-footer">
                               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                              <button id="create-class-btn" type="submit" class="btn btn-success">Create</button>
+                              <form action="" method="POST" style="display: inline-block;">
+                                <button id="create-class-btn" type="submit" class="btn btn-success">Create</button>
+                              </form>
                           </div>
                       </div>
                   </div>

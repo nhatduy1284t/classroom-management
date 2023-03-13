@@ -1,17 +1,17 @@
-import express from 'express'
-import assignmentController from '../app/controllers/assignment.controller.js';
-import classController from '../app/controllers/class.controller.js';
+import express from "express";
+import assignmentController from "../app/controllers/assignment.controller.js";
+import classController from "../app/controllers/class.controller.js";
 
 const classRouter = express.Router();
 
-classRouter.post('/assignment/create', assignmentController.createAssignment);
-classRouter.post('/assignment/submit', assignmentController.submitAssignment);
+classRouter.post("/assignment/create", assignmentController.createAssignment);
+classRouter.post("/assignment/submit", assignmentController.submitAssignment);
+classRouter.post("/create", classController.createClass);
+classRouter.post("/:id/assign", classController.assignClass);
+classRouter.post("/:id/unassign/:userId", classController.unassignClass);
 
-classRouter.get('/', classController.getClasses)
-classRouter.get('/:id', classController.id);
-classRouter.get('/create', classController.createClass);
-classRouter.post('/create', classController.postCreateClass);
-classRouter.get('/search', classController.search);
 
+classRouter.get("/", classController.getClasses);
+classRouter.get("/:id", classController.getClass);
 
 export default classRouter;
