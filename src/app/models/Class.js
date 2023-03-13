@@ -7,7 +7,6 @@ const classSchema = new Schema(
     class_name: { type: String },
     start_date: { type: Date },
     end_date: { type: Date },
-    last_name: { type: Date },
     teacher_id: { type: String },
   },
   { collection: "class" }

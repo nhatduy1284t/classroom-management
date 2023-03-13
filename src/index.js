@@ -15,6 +15,8 @@ import authRoutes from "./routes/auth.route.js";
 import classRoutes from "./routes/class.route.js";
 import homeRoutes from "./routes/home.route.js";
 
+import requireAuth from "./middlewares/auth.middleware.js";
+
 //Connect to db
 db();
 
@@ -43,9 +45,9 @@ app.get("/", (req, res) => {
   res.render("auth/login", { layout: "login" });
 });
 
-app.use("/users", userRoutes);
+app.use("/users", requireAuth, userRoutes);
 app.use("/auth", authRoutes);
-app.use("/class", classRoutes);
+app.use("/class",requireAuth, classRoutes);
 app.use("/home", homeRoutes);
 
 app.listen(port, () => console.log(`Example app listening at ${port}`));

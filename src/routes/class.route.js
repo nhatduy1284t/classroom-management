@@ -6,7 +6,12 @@ const classRouter = express.Router();
 
 classRouter.post('/assignment/create', assignmentController.createAssignment);
 classRouter.post('/assignment/submit', assignmentController.submitAssignment);
-classRouter.post('/create', classController.createClass);
 
 classRouter.get('/', classController.getClasses)
+classRouter.get('/:id', classController.id);
+classRouter.get('/create', classController.createClass);
+classRouter.post('/create', classController.postCreateClass);
+classRouter.get('/search', classController.search);
+
+
 export default classRouter;

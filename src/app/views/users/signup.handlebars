@@ -83,3 +83,12 @@
     alert(`${tag.getAttribute('data')} is created successfully`)
   </script>
 {{/if}}
+
+{{#if errors}}
+  <script id="alert-script" data="{{errors}}">
+    let tag= document.querySelector('#alert-script');
+    console.log(tag.getAttribute('data'))
+    alert(`${tag.getAttribute('data')}`)
+  </script>
+{{/if}}
+
