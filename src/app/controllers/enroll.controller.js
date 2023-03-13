@@ -1,4 +1,4 @@
-import Enrollment from '../models/Enrollment'
+import Enrollment from '../models/Enrollment.js'
 
 var enrollController = {};
 

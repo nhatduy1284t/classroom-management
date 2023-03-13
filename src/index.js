@@ -14,6 +14,7 @@ import userRoutes from "./routes/users.route.js";
 import authRoutes from "./routes/auth.route.js";
 import classRoutes from "./routes/class.route.js";
 import homeRoutes from "./routes/home.route.js";
+import enrollRoutes from "./routes/enroll.route.js"
 
 import requireAuth from "./middlewares/auth.middleware.js";
 
@@ -49,5 +50,7 @@ app.use("/users", requireAuth, userRoutes);
 app.use("/auth", authRoutes);
 app.use("/class",requireAuth, classRoutes);
 app.use("/home", homeRoutes);
+app.use("/enroll", requireAuth, enrollRoutes)
+
 
 app.listen(port, () => console.log(`Example app listening at ${port}`));
