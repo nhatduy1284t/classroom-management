@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import Assignment from "../models/Assignment.js";
 import Class from "../models/Class.js";
+import Enrollment from "../models/Enrollment.js";
 import User from "../models/User.js";
 
 var classController = {};
@@ -51,7 +53,60 @@ classController.getClass = async (req, res) => {
     let students = await User.find({ user_type: 0 }).lean(); //students
     let teachers = await User.find({ user_type: 1 }).lean(); //teachers
     let classroom = await Class.findById(classId).lean();
-    res.render("classes/assign-class", { classroom, students, teachers });
+
+    let enrollments = await Enrollment.find({ class_id: classId });
+    let enrollmentsUserId = enrollments.map((enrollment) => enrollment.user_id);
+
+    let notInClassTeachers = teachers.filter(
+      (teacher) => !enrollmentsUserId.includes(teacher._id.toString())
+    );
+    let notInClassStudents = students.filter(
+      (student) => !enrollmentsUserId.includes(student._id.toString())
+    );
+    let inClassTeachers = [];
+    let inClassStudents = [];
+
+    teachers.forEach((teacher) => {
+      enrollments.forEach((enroll) => {
+        if (enroll.user_id === teacher._id.toString()) {
+          teacher = {
+            ...teacher,
+            class_id: classId,
+            enroll_date: new Date(enroll.enroll_date).toLocaleDateString(
+              "en-GB"
+            ),
+          };
+          inClassTeachers.push(teacher);
+        }
+      });
+    });
+    students.forEach((student) => {
+      enrollments.forEach((enroll) => {
+        if (enroll.user_id === student._id.toString()) {
+          student = {
+            ...student,
+            class_id: classId,
+            enroll_date: new Date(enroll.enroll_date).toLocaleDateString(
+              "en-GB"
+            ),
+          };
+          inClassStudents.push(student);
+        }
+      });
+    });
+
+    classroom._id = classId;
+    res.render("classes/assign-class", {
+      classroom,
+      students: {
+        inClassStudents,
+        notInClassStudents,
+      },
+      teachers: {
+        inClassTeachers,
+        notInClassTeachers,
+      },
+    });
   } catch (error) {
     console.log(error);
   }
@@ -63,17 +118,37 @@ classController.assignClass = async (req, res) => {
 
     //then create
     let classId = req.params.id;
-    let teachersId = req.body.teachers;
+    let usersId = req.body.users;
 
-    let classroom = await Class.findByIdAndUpdate(classId, {
-      $addToSet: { teacher_id: teachersId },
+    //teacher enrollment
+    let enrollments = usersId.map((userId) => {
+      return {
+        enroll_date: Date.now(),
+        status: true,
+        user_id: userId,
+        class_id: classId,
+      };
     });
-    // console.log(classroom);
-
-    res.send("classes/assign-class");
+    let result = await Enrollment.create(enrollments);
+    res.redirect(`/class/${classId}`);
   } catch (error) {
     console.log(error);
   }
+};
+
+classController.unassignClass = async (req, res) => {
+  try {
+
+    let classId = req.params.id;
+    let userId = req.params.userId;
+    console.log(classId,userId)
+    let result = await Enrollment.findOneAndDelete({ user_id:userId, class_id: classId });
+
+    res.redirect(`/class/${classId}`)
+  } catch (error) {
+    console.log(error)
+  }
+
 };
 
 export default classController;

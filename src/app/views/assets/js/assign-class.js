@@ -14,14 +14,16 @@ console.log("table created");
 // "Click" event for remove buttons
 let removeBtns = document.querySelectorAll(".remove-btn");
 removeBtns.forEach(function (btn) {
+    let parentElement = btn.parentNode.closest('form');
+    
     btn.addEventListener("click", function (event) {
         event.preventDefault();
         var confirmRemove = confirm("Are you sure you want to remove?");
-
         // if the user confirms, remove the element
         if (confirmRemove) {
             // do something to remove the element
             console.log("Remove button clicked");
+            parentElement.submit()
         }
 
         // reload the page after the confirmation
@@ -91,14 +93,15 @@ var studentList = new List('student-list', options);
 let add_teachers_btn = document.querySelector("#add-teachers");
 add_teachers_btn.addEventListener("click", (event) => {
     event.preventDefault();
-
+    console.log("clicked submit add teachers")
     let teacher_form = document.querySelector("#teachers-form");
+    // console.log(teacher_form)
     teacher_form.submit();
 });
 
 let add_students_btn = document.querySelector("#add-students");
 add_students_btn.addEventListener("click", (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     
     let student_form = document.querySelector("#students-form");
     student_form.submit();

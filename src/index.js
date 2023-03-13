@@ -32,6 +32,9 @@ Handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
   return arg1 == arg2 ? options.fn(this) : options.inverse(this);
 });
 
+var myPartial = Handlebars.compile('<p>My variable value: {{myVariable}}</p>');
+Handlebars.registerPartial('myPartial', myPartial);
+
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded()); // for parsing application/x-www-form-urlencoded
 
