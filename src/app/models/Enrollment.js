@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
+
 const Schema = mongoose.Schema;
 
 const enrollmentSchema = new Schema(
@@ -14,3 +15,4 @@ const enrollmentSchema = new Schema(
 
 const Enrollment = mongoose.model("enrollment", enrollmentSchema);
 export default Enrollment;
+
