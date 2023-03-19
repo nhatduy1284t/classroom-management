@@ -13,10 +13,13 @@ import db from "./db/db.js";
 import userRoutes from "./routes/users.route.js";
 import authRoutes from "./routes/auth.route.js";
 import classRoutes from "./routes/class.route.js";
+import assignmentRoutes from "./routes/assignment.route.js";
 import homeRoutes from "./routes/home.route.js";
-import enrollRoutes from "./routes/enroll.route.js"
+
+import enrollRoutes from "./routes/enroll.route.js";
 
 import requireAuth from "./middlewares/auth.middleware.js";
+import privilege from "./middlewares/privilege.middleware.js";
 
 //Connect to db
 db();
@@ -29,25 +32,24 @@ const port = process.env.PORT || 3000;
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
-app.set("views", __dirname + "/app/views/");
+app.set("views", __dirname + "/public/views/");
 
 Handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
   return arg1 == arg2 ? options.fn(this) : options.inverse(this);
 });
 
-var myPartial = Handlebars.compile('<p>My variable value: {{myVariable}}</p>');
-Handlebars.registerPartial('myPartial', myPartial);
 
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded()); // for parsing application/x-www-form-urlencoded
 
-app.use(express.static("src/app/views/assets"));
+app.use(express.static("src/public/views/assets"));
 
 app.use(cookieParser("mySecretKey")); //Cookie parser to handle client's cookie
 
 //Middlewares
 app.use((req, res, next) => {
   res.locals.user = req.signedCookies.user_info;
+
   next();
 });
 
@@ -59,11 +61,22 @@ app.get("/", (req, res) => {
   }
 });
 
+app.get("/test", (req, res) => {
+  res.render("classes");
+  return;
+});
+
+app.post("/", (req, res) => {
+  console.log(req.file);
+  res.send("OK");
+});
+
 app.use("/users", requireAuth, userRoutes);
 app.use("/auth", authRoutes);
-app.use("/class",requireAuth, classRoutes);
-app.use("/home", homeRoutes);
-app.use("/enroll", requireAuth, enrollRoutes)
+app.use("/class", requireAuth, classRoutes);
+app.use("/assignment", requireAuth, assignmentRoutes);
 
+app.use("/home", requireAuth, homeRoutes);
+app.use("/enroll", requireAuth, enrollRoutes);
 
 app.listen(port, () => console.log(`Example app listening at ${port}`));

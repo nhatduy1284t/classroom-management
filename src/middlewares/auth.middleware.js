@@ -14,7 +14,7 @@ var requireAuth = async (req, res, next) => {
         return;
     }
 
-    res.locals.user = user;
+    res.locals.user = user._doc;
     next();
 };
 

@@ -7,6 +7,7 @@
 
 <!--Content starts here-->
 <div class="panel-body">
+  {{#ifEquals user.user_type "2"}}
   <button
     class="btn btn-success btn-md"
     data-toggle="modal"
@@ -14,6 +15,7 @@
   >
     Add new class
   </button>
+  {{/ifEquals}}
   <div
     class="modal fade"
     id="myModal"
