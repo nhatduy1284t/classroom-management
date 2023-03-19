@@ -7,6 +7,7 @@ const submissionSchema = new Schema(
     submission_id: { type: String },
     student_id: { type: String },
     assignment_id: { type: String },
+    grade: { type: Number },
     file_url: { type: String },
   },
   { collection: "submission" }

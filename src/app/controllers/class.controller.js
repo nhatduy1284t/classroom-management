@@ -15,6 +15,7 @@ classController.postCreateClass = async (req, res) => {
     //Check if it's an admin
 
     //then create
+
     let postClass = req.body;
     // postClass.teacher_id = [];
     const classroom = new Class(postClass);
@@ -28,10 +29,10 @@ classController.postCreateClass = async (req, res) => {
 classController.getClasses = async (req, res) => {
   try {
     //Check if it's an admin
-
-    //then create
+    console.log("da vao day getClasses");
+    //admin: show all classrooms
+    //student, teacher: only enrolled classes
     let classes = await Class.find();
-
     classes = classes.map((model) => {
       model._doc.start_date = new Date(
         model._doc.start_date
@@ -41,7 +42,17 @@ classController.getClasses = async (req, res) => {
       );
       return model._doc;
     });
-    console.log(classes);
+
+    if (res.locals.user.user_type !== "2") {
+      let userId = res.locals.user._id.toString();
+      let enrollments = await Enrollment.find({ user_id: userId });
+      let enrollmentsClassId = enrollments.map((e) => e.class_id);
+      classes = classes.filter((c) =>
+        enrollmentsClassId.includes(c._id.toString())
+      );
+
+    }
+
     res.render("classes/classes", { classes: classes });
   } catch (error) {
     console.log(error);
@@ -64,11 +75,40 @@ classController.search = async (req, res) => {
   });
 };
 
+classController.getClassStudent = async (req, res) => {
+  let classId = req.params.id;
+  let assignments = await Assignment.find({ class_id: classId }).lean(); //teachers
+  res.render("classes/detail", {
+    class_id: classId,
+    assignments: assignments
+  });
+};
+
+classController.getClassTeacher = async (req, res) => {
+  try {
+    let classId = req.params.id;
+    let assignments = await Assignment.find({ class_id: classId }).lean(); //teachers
+    res.render("classes/detail", {
+      class_id: classId,
+      assignments: assignments
+    });
+  } catch (error) {}
+};
+
 classController.getClass = async (req, res) => {
   try {
+    if (res.locals.user.user_type == "0") {
+      //student
+      classController.getClassStudent(req, res);
+      return;
+    }
+    if (res.locals.user.user_type == "1") {
+      //class
+
+      classController.getClassTeacher(req, res);
+      return;
+    }
     //Check if it's an admin
-
-
     //then create
     let classId = req.params.id;
     let students = await User.find({ user_type: 0 }).lean(); //students
@@ -161,7 +201,7 @@ classController.unassignClass = async (req, res) => {
   try {
     let classId = req.params.id;
     let userId = req.params.userId;
-    console.log(classId, userId);
+
     let result = await Enrollment.findOneAndDelete({
       user_id: userId,
       class_id: classId,

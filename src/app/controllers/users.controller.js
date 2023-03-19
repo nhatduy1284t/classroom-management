@@ -11,6 +11,7 @@ controller.index = async (req, res) => {
 };
 
 controller.getCreateUser = (req, res) => {
+  console.log("trong create user",res.locals.user)
   res.render("users/signup");
 };
 
