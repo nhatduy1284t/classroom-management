@@ -54,11 +54,10 @@ classController.search = async (req, res) => {
   const classroom = await Class();
   let matchedClasses = classroom.filter(
     (aClass) =>
-      aClass.id.toLowerCase().indexOf(q.toLowerCase()) !== -1 ||
-      aClass.class_name.toLowerCase().indexOf(q.toLowerCase()) !== -1
+      aClass.class_name.toLowerCase().indexOf(q.toLowerCase()) !== -1 
   );
 
-  res.render("classes/index", {
+  res.render("classes/classes", {
     input: q,
     classes: matchedClasses,
   });
@@ -156,18 +155,6 @@ classController.assignClass = async (req, res) => {
     console.log(error);
   }
 };
-
-classController.search = async (req, res) => {
-  let q = req.query.q; //Add a search bar w/ method GET and name property 'q' for the input
-
-  const classroom = await Class();
-  let matchedClasses = classroom.filter(aClass => aClass.id.toLowerCase().indexOf(q.toLowerCase()) !== -1 || aClass.class_name.toLowerCase().indexOf(q.toLowerCase()) !== -1);
-
-  res.render('classes/index', {
-    input: q,
-    classes: matchedClasses
-  })
-}
 
 classController.unassignClass = async (req, res) => {
   try {
