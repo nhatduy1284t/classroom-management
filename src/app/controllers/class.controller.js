@@ -7,8 +7,8 @@ import User from "../models/User.js";
 var classController = {};
 
 classController.createClass = (req, res) => {
-  res.render('classes/create')
-}
+  res.render("classes/create");
+};
 
 classController.postCreateClass = async (req, res) => {
   try {
@@ -48,9 +48,26 @@ classController.getClasses = async (req, res) => {
   }
 };
 
+classController.search = async (req, res) => {
+  let q = req.query.q; //Add a search bar w/ method GET and name property 'q' for the input
+
+  const classroom = await Class();
+  let matchedClasses = classroom.filter(
+    (aClass) =>
+      aClass.id.toLowerCase().indexOf(q.toLowerCase()) !== -1 ||
+      aClass.class_name.toLowerCase().indexOf(q.toLowerCase()) !== -1
+  );
+
+  res.render("classes/index", {
+    input: q,
+    classes: matchedClasses,
+  });
+};
+
 classController.getClass = async (req, res) => {
   try {
     //Check if it's an admin
+
 
     //then create
     let classId = req.params.id;
@@ -157,14 +174,16 @@ classController.unassignClass = async (req, res) => {
 
     let classId = req.params.id;
     let userId = req.params.userId;
-    console.log(classId,userId)
-    let result = await Enrollment.findOneAndDelete({ user_id:userId, class_id: classId });
+    console.log(classId, userId);
+    let result = await Enrollment.findOneAndDelete({
+      user_id: userId,
+      class_id: classId,
+    });
 
-    res.redirect(`/class/${classId}`)
+    res.redirect(`/class/${classId}`);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-
 };
 
 export default classController;

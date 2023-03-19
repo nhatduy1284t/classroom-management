@@ -14,4 +14,11 @@ classRouter.post("/:id/unassign/:userId", classController.unassignClass);
 classRouter.get("/", classController.getClasses);
 classRouter.get("/:id", classController.getClass);
 
+
+// classRouter.get('/:id', classController.id);
+// classRouter.get('/create', classController.createClass);
+// classRouter.post('/create', classController.postCreateClass);
+classRouter.get('/search', classController.search);
+
+
 export default classRouter;
