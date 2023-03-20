@@ -29,6 +29,12 @@
           <td>Jane Smith</td>
           <td><a href="jane_smith_work.pdf">Jane Smith's Work</a></td>
         </tr>
+        {{#each submission}}
+          <tr>
+            <td>{{submission.owner_name}}</td>
+            <td><a href="{{submission.file_url}}">{{`{submission.owner_name}'s work`}}</a></td>
+          </tr>
+        {{/each}}
         <!-- Add more rows for other students -->
       </tbody>
     </table>

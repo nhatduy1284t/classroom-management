@@ -16,10 +16,29 @@ assignmentController.getAssignment = async (req, res) => {
     let assignmentId = req.params.assignmentId;
     let assignment = await Assignment.findById(assignmentId).lean();
 
-    let submission = await Submission.findOne({
-      assignment_id: assignmentId,
-      student_id: res.locals.user._id,
-    }).lean();
+    let submission = []
+    if(req.signedCookies.user_info.user_type == 0) {
+      submission = await Submission.findOne({
+        assignment_id: assignmentId,
+        student_id: res.locals.user._id,
+      }).lean();
+      if (submission) {
+        submission.file_name = path.basename(submission.file_url);
+      }
+    } else {
+      submission = await Submission.find({assignment_id: assignmentId})
+      if(submission) {
+        let users = await User.find()
+        console.log(users)
+        submission.forEach(sub => {
+          users.forEach(user => {
+            if(sub.student_id == user._id.toString()) {
+              sub.owner_name = user.username
+            }
+          })
+        })
+      }
+    }
 
     assignment.start_date = moment(assignment.start_date).format(
       "dddd, D MMMM YYYY, h:mm A"
@@ -27,13 +46,12 @@ assignmentController.getAssignment = async (req, res) => {
     assignment.due_date = moment(assignment.due_date).format(
       "dddd, D MMMM YYYY, h:mm A"
     );
-    console.log(assignment.start_date);
-    if (submission) {
-      submission.file_name = path.basename(submission.file_url);
-    }
-
+  
+    console.log(submission)
     res.render("assignment/detail", { assignment, submission });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 assignmentController.createAssignment = async (req, res) => {
