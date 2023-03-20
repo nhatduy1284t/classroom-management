@@ -5,8 +5,8 @@ import privilege from "../middlewares/privilege.middleware.js";
 
 const classRouter = express.Router();
 
-classRouter.post("/assignment/create", assignmentController.createAssignment);
-classRouter.post("/assignment/submit", assignmentController.submitAssignment);
+// classRouter.post("/assignment/create", assignmentController.createAssignment);
+// classRouter.post("/assignment/submit", assignmentController.submitAssignment);
 classRouter.post("/create", classController.postCreateClass);
 classRouter.post("/:id/assign", classController.assignClass);
 classRouter.post("/:id/unassign/:userId", classController.unassignClass);

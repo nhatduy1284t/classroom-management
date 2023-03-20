@@ -27,16 +27,38 @@
           <tr>
             <td>{{first_name}} {{last_name}}</td>
             <td><a href="{{file_url}}">Submitted file</a></td>
-            <td>None</td>
+            <td>
+              {{#if grade includeZero=true}}
+              {{grade}}
+              {{else}}
+              None
+              {{/if}}
+            </td>
             <td>
               <div class="grade">
                 <button class="btn-grade btn btn-success">Grade</button>
                 <div class="grade-input-wrapper hidden">
-                  <input type="text" name="grade" class="grade-input w-50" />
-                  <button class="btn btn-success">✓</button>
+                  <form style="display:inline" method="post" action="/assignment/submit/grade">
+                     <input type="text" name="grade" class="grade-input w-50" />
+                     <input type="hidden" name="submission_id" value="{{_id}}" />
+                     <input type="hidden" name="assignment_id" value="{{assignment_id}}" />
+                  
+                     <button class="btn btn-success" type="submit">✓</button>
+                  </form>
+
                   <button class="btn btn-danger">X</button>
                 </div>
               </div>
+            </td>
+          </tr>
+        {{/each}}
+
+        {{#each notSubmissions}}
+          <tr>
+            <td>{{first_name}} {{last_name}}</td>
+            <td>Not submitted</td>
+            <td>None</td>
+            <td>
 
             </td>
           </tr>
@@ -63,7 +85,13 @@
         <tbody>
           <tr>
             <td>Grade</td>
+            {{#if submission.grade includeZero=true}}
+            <td>{{submission.grade}}</td>
+            {{else}}
             <td>Not graded yet</td>
+            {{/if}}
+
+            
           </tr>
           <tr>
             <td>Start date</td>
@@ -144,34 +172,61 @@
   padding:8px 18px; display:none; } .grade { display:flex; }
 </style>
 <script>
-
-  let inputFile = document.querySelector("#submission-file");
-  let btnSubmit = document.querySelector(".btn-submit");
-  if (document.querySelector("#submission-file"))
-    document
-      .querySelector("#submission-file")
-      .addEventListener("change", (e) => {
+ let inputFile = document.querySelector("#submission-file");
+let btnSubmit =
+    document.querySelector(".btn-submit");
+if (inputFile) {
+    inputFile.addEventListener("change", (e) => {
         if (e.target.value == "") {
-          btnSubmit.style.display = "none";
+            btnSubmit.style.display = "none";
         } else {
-          btnSubmit.style.display = "initial";
+            btnSubmit.style.display = "initial";
         }
-      });
-
-  
- 
-  let btnGrades = document.querySelectorAll('.btn-grade');
-  let 
-    if (btnGrades) {
+    });
+}
+let btnGrades =
+    document.querySelectorAll(".btn-grade");
+if (btnGrades) {
     btnGrades.forEach((btnGrade) => {
-      btnGrade.addEventListener("click", () => {
         let divGrade = btnGrade.parentElement;
         let inputGradeWrapper = divGrade.querySelector(".grade-input-wrapper");
-        inputGradeWrapper.classList.remove("hidden");
-        btnGrade.classList.add("hidden");
-      });
+        let inputNumber = inputGradeWrapper.querySelector('input');
+
+        btnGrade.addEventListener("click", () => {
+            inputGradeWrapper.classList.remove("hidden");
+            btnGrade.classList.add("hidden");
+        });
+
+        let btnAccept = divGrade.querySelector('.btn-success');
+        let btnCancel = divGrade.querySelector('.btn-danger');
+
+        btnCancel.addEventListener('click', () => {
+            inputGradeWrapper.classList.add("hidden");
+            btnGrade.classList.remove("hidden");
+        })
+
+        console.log(inputNumber)
+        inputNumber.addEventListener('input', (e) => {
+
+                let value = Number(e.target.value);
+                {{!-- if(isNaN(value)) {
+                  console.log("sad")
+                  return;
+                } --}}
+                if (isNaN(value) || value < 0) {
+                    value = 0;
+                } else if (value > 10) {
+                    value = 10;
+                } else {
+                    value = Math.round(value * 10) / 10;
+                }
+                e.target.value = value.toString();
+                console.log(value);
+        })
     });
 
+}
+</script>
 
-  }
+<script>
 

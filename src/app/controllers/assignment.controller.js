@@ -1,6 +1,7 @@
 import Assignment from "../models/Assignment.js";
 import Class from "../models/Class.js";
 import Submission from "../models/Submission.js";
+import Enrollment from "../models/Enrollment.js";
 import User from "../models/User.js";
 import multer from "multer";
 import fs from "fs";
@@ -27,11 +28,38 @@ assignmentController.getAssignment = async (req, res) => {
       assignment_id: assignmentId,
     }).lean();
 
+    let studentEnrollments = await Enrollment.find({
+      class_id: assignment.class_id,
+    }).lean();
+
+    //Get students who haven't submitted homework yet
+    let submittedStudentsId = submissions.map((sub) => sub.student_id);
+
+    console.log(studentEnrollments);
+    let notSubmittedStudentsId = studentEnrollments.map((s) => {
+      if (!submittedStudentsId.includes(s.user_id)) {
+        return s.user_id;
+      }
+      return null;
+    });
+
+    let notSubmissions = notSubmittedStudentsId.map(async (studentId) => {
+      let student = await User.findOne({ _id: studentId }).lean();
+
+      return student;
+    });
+    notSubmissions = await Promise.all(notSubmissions);
+    notSubmissions = notSubmissions.filter(
+      (student) => student !== null && student.user_type == "0"
+    );
+
+    //Get students who already submitted homework
     submissions = submissions.map(async (s) => {
       let student = await User.findById(s.student_id).lean();
 
       return {
         ...s,
+        _id: s._id.toString(),
         username: student.username,
         first_name: student.first_name,
         last_name: student.last_name,
@@ -54,10 +82,11 @@ assignmentController.getAssignment = async (req, res) => {
       assignment, 
       submissions, 
       submission,
+      notSubmissions,
       errors: req.app.locals.errors 
     });
     req.app.locals.errors = []
-  } catch (error) {}
+    } catch (error) {}
 };
 
 assignmentController.createAssignment = async (req, res) => {
@@ -229,4 +258,15 @@ assignmentController.changeSubmitAssignment = async (req, res) => {
   }
 };
 
+assignmentController.grade = async (req, res) => {
+  try {
+    let { grade, submission_id, assignment_id } = req.body;
+
+    let result = await Submission.findByIdAndUpdate(submission_id, {
+      grade: grade,
+    });
+    res.redirect(`/assignment/${assignment_id}`);
+    res.json(req.body);
+  } catch (error) {}
+};
 export default assignmentController;
