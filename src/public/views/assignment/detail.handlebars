@@ -6,7 +6,7 @@
         đề bài</a></p>
   </div>
 {{/if}}
-
+<h4>Due date: {{assignment.due_date}}</h4>
 <h4>Description</h4>
 <p class="assignment-description alert alert-primary">{{assignment.description}}
 </p>
@@ -18,21 +18,27 @@
         <tr>
           <th>Student Name</th>
           <th>Work Submitted</th>
+          <th>Grade</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>John Doe</td>
-          <td><a href="john_doe_work.pdf">John Doe's Work</a></td>
-        </tr>
-        <tr>
-          <td>Jane Smith</td>
-          <td><a href="jane_smith_work.pdf">Jane Smith's Work</a></td>
-        </tr>
-        {{#each submission}}
+        {{#each submissions}}
           <tr>
-            <td>{{submission.owner_name}}</td>
-            <td><a href="{{submission.file_url}}">{{`{submission.owner_name}'s work`}}</a></td>
+            <td>{{first_name}} {{last_name}}</td>
+            <td><a href="{{file_url}}">Submitted file</a></td>
+            <td>None</td>
+            <td>
+              <div class="grade">
+                <button class="btn-grade btn btn-success">Grade</button>
+                <div class="grade-input-wrapper hidden">
+                  <input type="text" name="grade" class="grade-input w-50" />
+                  <button class="btn btn-success">✓</button>
+                  <button class="btn btn-danger">X</button>
+                </div>
+              </div>
+
+            </td>
           </tr>
         {{/each}}
         <!-- Add more rows for other students -->
@@ -85,7 +91,11 @@
           enctype="multipart/form-data"
         >
           <input type="hidden" name="student_id" value="{{user._id}}" />
-          <input type="hidden" name="submission_submitted_id" value="{{submission._id}}" />
+          <input
+            type="hidden"
+            name="submission_submitted_id"
+            value="{{submission._id}}"
+          />
           <input
             type="hidden"
             name="assignment_id"
@@ -129,12 +139,38 @@
   .submission { display:flex; } .student-table { width: 100%; }
   .btn-submit-wrapper { display:flex; justify-content: center; flex-direction:
   column; align-items: center; } .btn-submit-wrapper button{ margin-top:10px;
-  padding:8px 18px; display:none; }
+  padding:8px 18px; display:none; } .grade { display:flex; }
 </style>
 <script>
-  let inputFile = document.querySelector("#submission-file"); let btnSubmit =
-  document.querySelector(".btn-submit"); console.log(inputFile)
-  document.querySelector("#submission-file").addEventListener('change',(e) => {
-  if(e.target.value == "") { btnSubmit.style.display ="none"; } else {
-  btnSubmit.style.display ="initial"; } })
+
+  let inputFile = document.querySelector("#submission-file");
+  let btnSubmit = document.querySelector(".btn-submit");
+  if (document.querySelector("#submission-file"))
+    document
+      .querySelector("#submission-file")
+      .addEventListener("change", (e) => {
+        if (e.target.value == "") {
+          btnSubmit.style.display = "none";
+        } else {
+          btnSubmit.style.display = "initial";
+        }
+      });
+
+  
+ 
+  let btnGrades = document.querySelectorAll('.btn-grade');
+  let 
+    if (btnGrades) {
+    btnGrades.forEach((btnGrade) => {
+      btnGrade.addEventListener("click", () => {
+        let divGrade = btnGrade.parentElement;
+        let inputGradeWrapper = divGrade.querySelector(".grade-input-wrapper");
+        inputGradeWrapper.classList.remove("hidden");
+        btnGrade.classList.add("hidden");
+      });
+    });
+
+
+  }
+
 </script>
