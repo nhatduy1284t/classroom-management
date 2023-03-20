@@ -22,7 +22,8 @@ import requireAuth from "./middlewares/auth.middleware.js";
 import privilege from "./middlewares/privilege.middleware.js";
 
 //Connect to db
-db();
+let connection = db.getNewDBConnection()
+connection();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

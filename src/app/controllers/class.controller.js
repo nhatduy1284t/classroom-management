@@ -89,9 +89,15 @@ classController.getClassTeacher = async (req, res) => {
     let assignments = await Assignment.find({ class_id: classId }).lean(); //teachers
     res.render("classes/detail", {
       class_id: classId,
-      assignments: assignments
+      assignments: assignments,
+      errors: req.app.locals.errors,
+      values: req.app.locals.values
     });
-  } catch (error) {}
+    req.app.locals.errors = []
+    req.app.locals.values = ''
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 classController.getClass = async (req, res) => {
@@ -103,7 +109,6 @@ classController.getClass = async (req, res) => {
     }
     if (res.locals.user.user_type == "1") {
       //class
-
       classController.getClassTeacher(req, res);
       return;
     }

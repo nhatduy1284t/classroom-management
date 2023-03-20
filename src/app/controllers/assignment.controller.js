@@ -38,7 +38,6 @@ assignmentController.getAssignment = async (req, res) => {
       };
     });
     submissions = await Promise.all(submissions);
-    console.log(submissions);
 
     assignment.start_date = moment(assignment.start_date).format(
       "dddd, D MMMM YYYY, h:mm A"
@@ -46,22 +45,19 @@ assignmentController.getAssignment = async (req, res) => {
     assignment.due_date = moment(assignment.due_date).format(
       "dddd, D MMMM YYYY, h:mm A"
     );
-<<<<<<< HEAD
-  
-    console.log(submission)
-    res.render("assignment/detail", { assignment, submission });
-  } catch (error) {
-    console.log(error)
-  }
-=======
-    console.log(assignment.start_date);
+
     if (submission) {
       submission.file_name = path.basename(submission.file_url);
     }
 
-    res.render("assignment/detail", { assignment, submissions, submission });
+    res.render("assignment/detail", { 
+      assignment, 
+      submissions, 
+      submission,
+      errors: req.app.locals.errors 
+    });
+    req.app.locals.errors = []
   } catch (error) {}
->>>>>>> origin/duy
 };
 
 assignmentController.createAssignment = async (req, res) => {
@@ -193,7 +189,6 @@ assignmentController.changeSubmitAssignment = async (req, res) => {
       //Delete old file
       fs.unlink(`src/public/views/assets${oldFileUrl}`, (err) => {
         if (err) throw err;
-        console.log("File deleted!");
       });
       const file = req.file;
       //Write new file

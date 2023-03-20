@@ -15,6 +15,7 @@
         id="username"
         name="username"
         placeholder="Enter username"
+        value="{{values.username}}"
       />
     </div>
     <div class="form-group">
@@ -25,6 +26,7 @@
         id="password"
         placeholder="Enter password"
         name="password"
+        value="{{values.password}}"
       />
     </div>
     <div class="form-group">
@@ -45,6 +47,7 @@
         id="first_name"
         placeholder="First name"
         name="first_name"
+        value="{{values.first_name}}"
       />
     </div>
     <div class="form-group">
@@ -55,15 +58,15 @@
         id="last_name"
         placeholder="Last name"
         name="last_name"
+        value="{{values.last_name}}"
       />
     </div>
     <div class="form-group">
-      <label for="confirm_password">Type:</label>
+      <label for="type">Type:</label>
       <select
         type="type"
         class="form-control"
         id="type"
-        placeholder="Confirm password"
         name="user_type"
       >
         {{! <option value=""></option> }}

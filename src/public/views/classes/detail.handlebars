@@ -104,11 +104,11 @@
           role="form"
           action="/assignment/create"
           method="post"
-          enctype="multipart/form-data"
+          enctype="application/x-www-form-urlencoded"
         >
           <div class="form-group">
             <label>Assignment Name</label>
-            <input class="form-control" name="assignment_name" />
+            <input class="form-control" name="assignment_name" value="{{values.assignment_name}}"/>
           </div>
           <div class="form-group">
             <label>Due Date</label>
@@ -116,15 +116,17 @@
               type="datetime-local"
               class="form-control"
               name="assignment_due_date"
+              value="{{values.assignment_due_date}}"
             />
           </div>
           <div class="form-group">
             <label>Upload File</label>
-            <input type="file" name="file" />
+            <input type="file" name="file" id="file" value="{{values.file}}"/>
+            <input type="hidden" name="file_size" id="file_size">
           </div>
           <div class="form-group">
             <label>Instructions</label>
-            <textarea class="form-control" name="description"></textarea>
+            <textarea class="form-control" name="description" value="{{values.description}}"></textarea>
           </div>
           <input type="hidden" name="class_id" value="{{class_id}}">
           <button type="submit" class="btn btn-primary">Create</button>
@@ -149,3 +151,21 @@
   src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.9/metisMenu.min.js"
 ></script>
 <!-- CUSTOM SCRIPTS -->
+
+{{#if errors}}
+  <script id="alert-script" data="{{errors}}">
+    let tag= document.querySelector('#alert-script');
+    console.log(tag.getAttribute('data'))
+    alert(`${tag.getAttribute('data')}`)
+  </script>
+{{/if}}
+
+<script>
+
+  var uploadField = document.getElementById("file");
+  var sizeField = document.getElementById("file_size");
+
+  uploadField.onchange = function() {
+    sizeField.value = this.files[0].size
+  };
+</script>
