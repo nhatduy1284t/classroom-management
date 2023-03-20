@@ -50,7 +50,6 @@ classController.getClasses = async (req, res) => {
       classes = classes.filter((c) =>
         enrollmentsClassId.includes(c._id.toString())
       );
-
     }
 
     res.render("classes/classes", { classes: classes });
@@ -78,9 +77,23 @@ classController.search = async (req, res) => {
 classController.getClassStudent = async (req, res) => {
   let classId = req.params.id;
   let assignments = await Assignment.find({ class_id: classId }).lean(); //teachers
+  let enrollments = await Enrollment.find({ class_id: classId }).lean();
+  
+  let users = enrollments.map(async e => {
+    let userInfo =  await User.findById(e.user_id).lean();
+
+    return userInfo;
+  })
+  users = await Promise.all(users);
+
+  let students = users.filter(user => user.user_type == "0")
+  let teachers = users.filter(user => user.user_type == "1")
+
   res.render("classes/detail", {
     class_id: classId,
-    assignments: assignments
+    assignments: assignments,
+    students,
+    teachers
   });
 };
 
@@ -88,10 +101,26 @@ classController.getClassTeacher = async (req, res) => {
   try {
     let classId = req.params.id;
     let assignments = await Assignment.find({ class_id: classId }).lean(); //teachers
+    let enrollments = await Enrollment.find({ class_id: classId }).lean();
+
+
+    let users = enrollments.map(async e => {
+      let userInfo =  await User.findById(e.user_id).lean();
+
+      return userInfo;
+    })
+    users = await Promise.all(users);
+
+    let students = users.filter(user => user.user_type == "0")
+    let teachers = users.filter(user => user.user_type == "1")
+
     res.render("classes/detail", {
       class_id: classId,
-      assignments: assignments
+      assignments: assignments,
+      students,
+      teachers
     });
+
   } catch (error) {}
 };
 

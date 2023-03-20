@@ -1,21 +1,11 @@
-<!-- BOOTSTRAP STYLES-->
-<link href="assets/css/bootstrap.css" rel="stylesheet" />
-<!-- FONTAWESOME STYLES-->
-<link href="assets/css/font-awesome.css" rel="stylesheet" />
-<!-- CUSTOM STYLES-->
-<link href="assets/css/custom.css" rel="stylesheet" />
-<!-- GOOGLE FONTS-->
-<link
-  href="http://fonts.googleapis.com/css?family=Open+Sans"
-  rel="stylesheet"
-  type="text/css"
-/>
+<link rel="stylesheet" href="/js/dataTables/dataTables.bootstrap.css" />
 
 <div class="row">
   <div class="col-lg-12">
-    <h2>Class Page </h2>
+    <h2>Class Page</h2>
   </div>
 </div>
+
 <!-- /. ROW  -->
 <hr />
 <div class="row">
@@ -25,6 +15,75 @@
     </div>
   </div>
 </div>
+{{!-- Danh sach students and teachers --}}
+<div class="row">
+  <div class="col-md-6">
+    <!--    Hover Rows  -->
+    <div class="panel panel-default">
+      <div class="panel-heading" style="font-size: 16px">
+        <div class="panel-heading-title">Students</div>
+        <div class="panel-heading-btn">
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table id="student-table" class="table table-hover display">
+            <thead>
+              <tr>
+                {{! <th>ID</th> }}
+                <th>Name</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {{#each students}}
+                <tr>
+                  {{! <td>2059035</td> }}
+                  <td>{{first_name}} {{last_name}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- End  Hover Rows  -->
+  </div>
+    <div class="col-md-6">
+    <!--    Hover Rows  -->
+    <div class="panel panel-default">
+      <div class="panel-heading" style="font-size: 16px">
+        <div class="panel-heading-title">Teachers</div>
+        <div class="panel-heading-btn">
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table id="student-table" class="table table-hover display">
+            <thead>
+              <tr>
+                {{! <th>ID</th> }}
+                <th>Name</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {{#each teachers}}
+                <tr>
+                  {{! <td>2059035</td> }}
+                  <td>{{first_name}} {{last_name}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- End  Hover Rows  -->
+  </div>
+  <!-- /. ROW  -->
+</div>
+{{!-- ---------------- --}}
 <!-- /. ROW  -->
 <div class="row">
   <div class="col-lg-12">
@@ -91,7 +150,7 @@
   </div>
 </div> --}}
 <!-- /. ROW  -->
-<!-- create assigment  -->
+<!-- create assignment  -->
 {{#ifEquals user.user_type "1"}}
 <div class="row">
   <div class="col-lg-12">
@@ -148,4 +207,19 @@
 <script
   src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.9/metisMenu.min.js"
 ></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="/js/dataTables/jquery.dataTables.js"></script>
+<script src="/js/dataTables/dataTables.bootstrap.js"></script>
+<script>
+  $(document).ready(function () {
+    $('.table').DataTable({
+      "info":false,
+      "ordering":false,
+      "bLengthChange":false,
+      "pageLength":4
+    }
+    );
+});
+</script>
 <!-- CUSTOM SCRIPTS -->

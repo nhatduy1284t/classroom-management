@@ -1,6 +1,7 @@
 import Assignment from "../models/Assignment.js";
 import Class from "../models/Class.js";
 import Submission from "../models/Submission.js";
+import Enrollment from "../models/Enrollment.js";
 import User from "../models/User.js";
 import multer from "multer";
 import fs from "fs";
@@ -27,31 +28,62 @@ assignmentController.getAssignment = async (req, res) => {
       assignment_id: assignmentId,
     }).lean();
 
+    let studentEnrollments = await Enrollment.find({
+      class_id: assignment.class_id,
+    }).lean();
+
+    //Get students who haven't submitted homework yet
+    let submittedStudentsId = submissions.map((sub) => sub.student_id);
+
+    console.log(studentEnrollments);
+    let notSubmittedStudentsId = studentEnrollments.map((s) => {
+      if (!submittedStudentsId.includes(s.user_id)) {
+        return s.user_id;
+      }
+      return null;
+    });
+
+    let notSubmissions = notSubmittedStudentsId.map(async (studentId) => {
+      let student = await User.findOne({ _id: studentId }).lean();
+
+      return student;
+    });
+    notSubmissions = await Promise.all(notSubmissions);
+    notSubmissions = notSubmissions.filter(
+      (student) => student !== null && student.user_type == "0"
+    );
+
+    //Get students who already submitted homework
     submissions = submissions.map(async (s) => {
       let student = await User.findById(s.student_id).lean();
 
       return {
         ...s,
+        _id: s._id.toString(),
         username: student.username,
         first_name: student.first_name,
         last_name: student.last_name,
       };
     });
     submissions = await Promise.all(submissions);
-    console.log(submissions);
-
+    console.log("sadsad", submissions);
     assignment.start_date = moment(assignment.start_date).format(
       "dddd, D MMMM YYYY, h:mm A"
     );
     assignment.due_date = moment(assignment.due_date).format(
       "dddd, D MMMM YYYY, h:mm A"
     );
-    console.log(assignment.start_date);
+
     if (submission) {
       submission.file_name = path.basename(submission.file_url);
     }
 
-    res.render("assignment/detail", { assignment, submissions, submission });
+    res.render("assignment/detail", {
+      assignment,
+      submissions,
+      submission,
+      notSubmissions,
+    });
   } catch (error) {}
 };
 
@@ -225,4 +257,15 @@ assignmentController.changeSubmitAssignment = async (req, res) => {
   }
 };
 
+assignmentController.grade = async (req, res) => {
+  try {
+    let { grade, submission_id, assignment_id } = req.body;
+
+    let result = await Submission.findByIdAndUpdate(submission_id, {
+      grade: grade,
+    });
+    res.redirect(`/assignment/${assignment_id}`);
+    res.json(req.body);
+  } catch (error) {}
+};
 export default assignmentController;
