@@ -16,10 +16,29 @@ assignmentController.getAssignment = async (req, res) => {
     let assignmentId = req.params.assignmentId;
     let assignment = await Assignment.findById(assignmentId).lean();
 
+    //For student
     let submission = await Submission.findOne({
       assignment_id: assignmentId,
       student_id: res.locals.user._id,
     }).lean();
+
+    //For teacher to see submissions list
+    let submissions = await Submission.find({
+      assignment_id: assignmentId,
+    }).lean();
+
+    submissions = submissions.map(async (s) => {
+      let student = await User.findById(s.student_id).lean();
+
+      return {
+        ...s,
+        username: student.username,
+        first_name: student.first_name,
+        last_name: student.last_name,
+      };
+    });
+    submissions = await Promise.all(submissions);
+    console.log(submissions);
 
     assignment.start_date = moment(assignment.start_date).format(
       "dddd, D MMMM YYYY, h:mm A"
@@ -32,7 +51,7 @@ assignmentController.getAssignment = async (req, res) => {
       submission.file_name = path.basename(submission.file_url);
     }
 
-    res.render("assignment/detail", { assignment, submission });
+    res.render("assignment/detail", { assignment, submissions, submission });
   } catch (error) {}
 };
 
@@ -160,12 +179,12 @@ assignmentController.changeSubmitAssignment = async (req, res) => {
         assignment_id: postSubmission.assignment_id,
         student_id: postSubmission.student_id,
       }).lean();
-      
+
       const oldFileUrl = submission.file_url;
       //Delete old file
       fs.unlink(`src/public/views/assets${oldFileUrl}`, (err) => {
         if (err) throw err;
-        console.log('File deleted!');
+        console.log("File deleted!");
       });
       const file = req.file;
       //Write new file

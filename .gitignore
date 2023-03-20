@@ -1,2 +1,4 @@
 node_modules
 .env
+/src/public/views/assets/assignment
+/src/public/views/assets/submission
