@@ -66,7 +66,7 @@ controller.changePassword = async (req, res) => {
     let { old_password, new_password, confirm_new_password, user_id } =
       req.body;
     let user = await User.findById(user_id).lean();
-    let message ="";
+    let message = "";
 
     if (user.password !== md5(old_password)) {
       message += encodeURIComponent("Your password is not correct !\n");
@@ -76,15 +76,24 @@ controller.changePassword = async (req, res) => {
       message += encodeURIComponent("Your confirm password is not correct !\n");
     }
 
-    if(new_password.length < 5) {
-      message += encodeURIComponent(`New password must be at least 5 characters in length !\n`);
+    if (new_password.length < 5) {
+      message += encodeURIComponent(
+        `New password must be at least 5 characters in length !\n`
+      );
     }
 
-    if(message !== "") {
+    if (message !== "") {
       return res.redirect("/home?message=" + message);
     }
 
-    res.redirect("/home");
+    let newPassword = md5(new_password);
+
+    let result = await User.findByIdAndUpdate(user_id, {
+      password: newPassword,
+    });
+    message = "Update password successfully !";
+
+    return res.redirect("/home?message=" + message);
   } catch (error) {
     console.log(error);
   }
