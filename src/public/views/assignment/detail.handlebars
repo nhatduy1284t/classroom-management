@@ -1,4 +1,9 @@
-<h1>{{assignment.assignment_name}}</h1>
+<h1>{{assignment.assignment_name}}
+  {{#if isDueDate}}
+    <span class="danger" style="color:red">[Closed]</span>
+  {{/if}}
+  </h1>
+
 {{#if assignment.file_url}}
   <div class="assignment-file">
     <h4>File:</h4>
@@ -26,7 +31,11 @@
         {{#each submissions}}
           <tr>
             <td>{{first_name}} {{last_name}}</td>
+            {{#if file_url}}
             <td><a href="{{file_url}}">Submitted file</a></td>
+            {{else}}
+            <td>Not submitted</td>
+            {{/if}}
             <td>
               {{#if grade includeZero=true}}
               {{grade}}
@@ -110,52 +119,59 @@
           <!-- Add more rows for other students -->
         </tbody>
       </table>
-      {{#if submission}}
-        <form
-          class="btn-submit-wrapper"
-          method="post"
-          action="/assignment/changesubmit"
-          action="asd"
-          enctype="multipart/form-data"
-        >
-          <input type="hidden" name="student_id" value="{{user._id}}" />
-          <input
-            type="hidden"
-            name="submission_submitted_id"
-            value="{{submission._id}}"
-          />
-          <input
-            type="hidden"
-            name="assignment_id"
-            value="{{assignment._id}}"
-          />
-          <input type="file" id="submission-file" name="file" />
-          <button
-            class="btn-submit btn btn-primary"
-            type="submit"
-          >Submit</button>
-        </form>
-      {{else}}
-        <form
-          class="btn-submit-wrapper"
-          method="post"
-          action="/assignment/submit"
-          action="asd"
-          enctype="multipart/form-data"
-        >
-          <input type="hidden" name="student_id" value="{{user._id}}" />
-          <input
-            type="hidden"
-            name="assignment_id"
-            value="{{assignment._id}}"
-          />
-          <input type="file" id="submission-file" name="file" />
-          <button
-            class="btn-submit btn btn-primary"
-            type="submit"
-          >Submit</button>
-        </form>
-      {{/if}}
+
+      {{#unless isDueDate}}
+        {{#if submission}}
+          <form
+            class="btn-submit-wrapper"
+            method="post"
+            action="/assignment/changesubmit"
+            action="asd"
+            enctype="multipart/form-data"
+          >
+            <input type="hidden" name="student_id" value="{{user._id}}" />
+            <input
+              type="hidden"
+              name="submission_submitted_id"
+              value="{{submission._id}}"
+            />
+            <input
+              type="hidden"
+              name="assignment_id"
+              value="{{assignment._id}}"
+            />
+        
+            <input type="file" id="submission-file" name="file" />
+            <input type="hidden" name="file_size" id="file_size" />
+            <button
+              class="btn-submit btn btn-primary"
+              type="submit"
+            >Submit</button>
+          </form>
+        {{else}}
+          <form
+            class="btn-submit-wrapper"
+            method="post"
+            action="/assignment/submit"
+            action="asd"
+            enctype="multipart/form-data"
+          >
+            <input type="hidden" name="student_id" value="{{user._id}}" />
+            <input
+              type="hidden"
+              name="assignment_id"
+              value="{{assignment._id}}"
+            />
+            <input type="file" id="submission-file" name="file" />
+            <input type="hidden" name="file_size" id="file_size" />
+            <button
+              class="btn-submit btn btn-primary"
+              type="submit"
+            >Submit</button>
+          </form>
+        {{/if}}
+      {{/unless}}
+ 
     </div>
   </div>
 {{/ifEquals}}
@@ -226,6 +242,15 @@ if (btnGrades) {
 }
 </script>
 
-<script>
+{{#ifEquals user.user_type "0"}}
 
-</script>
+  {{#if dueDateMessage}}
+  <script class="due-date-message-script" data="{{dueDateMessage}}">
+
+    let messageTag = document.querySelector('.due-date-message-script');
+    alert(messageTag.getAttribute('data'));
+    
+  </script>
+  {{/if}}
+{{/ifEquals}}
+

@@ -20,6 +20,7 @@ controller.signup = (req, res) => {
 };
 
 controller.createUser = async (req, res) => {
+  console.log("ASd")
   let user = req.body;
   let date = new Date();
   try {

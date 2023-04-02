@@ -1,42 +1,134 @@
-﻿                <div class="row">
-                    <div class="col-md-12">
-                     <h2>Dashboard</h2>   
-                        <h5 >User name: <span class="user-name">{{user.username}}</span> </h5>
-                        <h5>Role:
-                          <span class="user-role">
-                        {{#ifEquals user.user_type "0"}}
-                            Student
-                        {{/ifEquals}}
-                        {{#ifEquals user.user_type "1"}}
-                            Teacher
-                        {{/ifEquals}} 
-                        {{#ifEquals user.user_type "2"}}
-                            Admin
-                        {{/ifEquals}}    
-                          </span>
-                        </h5>       
-                    </div>                
-                </div>
-                
-                 <!-- /. ROW  -->
-  
-                  <hr />
-      
-    </div>
-             <!-- /. PAGE INNER  -->
-        
-    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
-    <!-- JQUERY SCRIPTS -->
+﻿<div class="info row">
+  <div class="col-md-12">
+    <h2>Dashboard</h2>
+    <h5>User name: <span class="user-name">{{user.username}}</span> </h5>
+    <h5>Role:
+      <span class="user-role">
+        {{#ifEquals user.user_type "0"}}
+          Student
+        {{/ifEquals}}
+        {{#ifEquals user.user_type "1"}}
+          Teacher
+        {{/ifEquals}}
+        {{#ifEquals user.user_type "2"}}
+          Admin
+        {{/ifEquals}}
+      </span>
+    </h5>
+    <h5>First name: <span>{{user.first_name}}</span> </h5>
+    <h5>Last name: <span>{{user.last_name}}</span></h5>
+    <button
+      class="btn btn-primary btn-md"
+      data-toggle="modal"
+      data-target="#myModal"
+      data-backdrop="static"
+      data-keyboard="false"
+    >
+      Change password
+    </button>
+  </div>
+</div>
 
-    <script src="assets/js/jquery-1.10.2.js"></script>
-      <!-- BOOTSTRAP SCRIPTS -->
-    <script src="assets/js/bootstrap.min.js"></script>
-    <!-- METISMENU SCRIPTS -->
-    <script src="assets/js/jquery.metisMenu.js"></script>
-     <!-- MORRIS CHART SCRIPTS -->
-     <script src="assets/js/morris/raphael-2.1.0.min.js"></script>
-    <script src="assets/js/morris/morris.js"></script>
-      <!-- CUSTOM SCRIPTS -->
-    <script src="assets/js/custom.js"></script>
-    
-   
+<!-- /. ROW  -->
+<!--Content starts here-->
+
+<div
+  class="modal fade"
+  id="myModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-hidden="true"
+        >
+          &times;
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Change password</h4>
+      </div>
+      <div class="modal-body">
+        <form
+          id="change-password-form"
+          role="form"
+          method="post"
+          action="/auth/changepassword"
+        >
+          <div class="form-group">
+            <label>Old password</label>
+            <input
+              id="course-name"
+              class="form-control"
+              placeholder="PLease enter the old password"
+              name="old_password"
+              type="password"
+            />
+          </div>
+          <div class="form-group">
+            <label>New password</label>
+            <input
+              id="course-name"
+              class="form-control"
+              placeholder="PLease enter the new password"
+              name="new_password"
+              type="password"
+            />
+          </div>
+          <div class="form-group">
+            <label>Confirm new password</label>
+            <input
+              id="course-name"
+              class="form-control"
+              placeholder="PLease confirm the new password"
+              name="confirm_new_password"
+              type="password"
+            />
+          </div>
+          <input type="hidden" name="user_id" value="{{user._id}}" />
+          <div class="form-group btn-group">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+              Close
+            </button>
+            <button
+              id="create-class-btn"
+              type="submit"
+              class="btn btn-success btn-save"
+            >
+              Save
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /. PAGE INNER  -->
+
+<!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+<!-- JQUERY SCRIPTS -->
+
+<script src="/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/js/jquery.metisMenu.js"></script>
+<!-- MORRIS CHART SCRIPTS -->
+<script src="/js/morris/raphael-2.1.0.min.js"></script>
+<script src="/js/morris/morris.js"></script>
+<!-- CUSTOM SCRIPTS -->
+<script src="/js/custom.js"></script>
+
+{{#if message}}
+  <script id="message-change-password-tag" data="{{message}}">
+    let tag = document.querySelector('#message-change-password-tag');
+    alert(tag.getAttribute('data')); window.location.replace("/home");
+  </script>
+{{/if}}

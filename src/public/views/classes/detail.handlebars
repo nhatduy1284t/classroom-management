@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-lg-12">
-    <h2>Class Page</h2>
+    <h2>Class: {{classroom.class_name}}</h2>
   </div>
 </div>
 
@@ -15,7 +15,7 @@
     </div>
   </div>
 </div>
-{{!-- Danh sach students and teachers --}}
+{{! Danh sach students and teachers }}
 <div class="row">
   <div class="col-md-6">
     <!--    Hover Rows  -->
@@ -49,7 +49,7 @@
     </div>
     <!-- End  Hover Rows  -->
   </div>
-    <div class="col-md-6">
+  <div class="col-md-6">
     <!--    Hover Rows  -->
     <div class="panel panel-default">
       <div class="panel-heading" style="font-size: 16px">
@@ -83,7 +83,7 @@
   </div>
   <!-- /. ROW  -->
 </div>
-{{!-- ---------------- --}}
+{{! ---------------- }}
 <!-- /. ROW  -->
 <div class="row">
   <div class="col-lg-12">
@@ -102,15 +102,38 @@
               </tr>
             </thead>
             <tbody>
-              {{#each assignments}}
-              <tr>
-                <td>
-                  <a href="/assignment/{{_id}}">{{assignment_name}}</a>
-                  </td>
-                <td>March 15th, 2023</td>
-                <td>Not Submitted</td>
-              </tr>
-              {{/each}}
+              {{#ifEquals user.user_type "0"}}
+                {{#each assignments}}
+                  <tr>
+                    <td>
+                      <a href="/assignment/{{_id}}">{{assignment_name}}</a>
+                    </td>
+                    <td>{{due_date}}</td>
+                    <td>
+                      {{#if submitted}}
+                        Submitted
+                      {{else}}
+                        Not submitted
+                      {{/if}}
+                    </td>
+                  </tr>
+                {{/each}}
+              {{/ifEquals}}
+              {{#ifEquals user.user_type "1"}}
+                {{#each assignments}}
+                  <tr>
+                    <td>
+                      <a href="/assignment/{{_id}}">{{assignment_name}}</a>
+                    </td>
+                    <td>{{due_date}}</td>
+                    <td>
+                      {{numOfSubmitted}}
+                      submitted
+                    </td>
+                  </tr>
+                {{/each}}
+              {{/ifEquals}}
+
             </tbody>
           </table>
         </div>
@@ -119,7 +142,7 @@
   </div>
 </div>
 <!-- /. ROW  -->
-{{!-- <div class="row">
+{{! <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -148,53 +171,67 @@
       </div>
     </div>
   </div>
-</div> --}}
+</div> }}
 <!-- /. ROW  -->
 <!-- create assignment  -->
 {{#ifEquals user.user_type "1"}}
-<div class="row">
-  <div class="col-lg-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        Create New Assignment
-      </div>
-      <div class="panel-body">
-        <form
-          role="form"
-          action="/assignment/create"
-          method="post"
-          enctype="multipart/form-data"
-        >
-          <div class="form-group">
-            <label>Assignment Name</label>
-            <input class="form-control" name="assignment_name" />
-          </div>
-          <div class="form-group">
-            <label>Due Date</label>
-            <input
-              type="datetime-local"
-              class="form-control"
-              name="assignment_due_date"
-            />
-          </div>
-          <div class="form-group">
-            <label>Upload File</label>
-            <input type="file" name="file" />
-          </div>
-          <div class="form-group">
-            <label>Instructions</label>
-            <textarea class="form-control" name="description"></textarea>
-          </div>
-          <input type="hidden" name="class_id" value="{{class_id}}">
-          <button type="submit" class="btn btn-primary">Create</button>
-        </form>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Create New Assignment
+        </div>
+        <div class="panel-body">
+          <form
+            role="form"
+            action="/assignment/create"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <div class="form-group">
+              <label>Assignment Name</label>
+              <input
+                class="form-control"
+                name="assignment_name"
+                value="{{values.assignment_name}}"
+              />
+            </div>
+            <div class="form-group" style="width:25%">
+              <label>Due Date</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                name="assignment_due_date"
+                value="{{values.assignment_due_date}}"
+              />
+            </div>
+            <div class="form-group">
+              <label>Upload File</label>
+              <input
+                type="file"
+                name="file"
+                id="file"
+                value="{{values.file}}"
+              />
+              <input type="hidden" name="file_size" id="file_size" />
+            </div>
+            <div class="form-group">
+              <label>Instructions</label>
+              <textarea
+                class="form-control"
+                name="description"
+                value="{{values.description}}"
+              ></textarea>
+            </div>
+            <input type="hidden" name="class_id" value="{{class_id}}" />
+            <button type="submit" class="btn btn-primary">Create</button>
+          </form>
 
-
+        </div>
       </div>
     </div>
   </div>
-</div>
-{{/ifEquals }}
+{{/ifEquals}}
 <!-- /. WRAPPER  -->
 <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
 <!-- JQUERY SCRIPTS -->
@@ -212,14 +249,23 @@
 <script src="/js/dataTables/jquery.dataTables.js"></script>
 <script src="/js/dataTables/dataTables.bootstrap.js"></script>
 <script>
-  $(document).ready(function () {
-    $('.table').DataTable({
-      "info":false,
-      "ordering":false,
-      "bLengthChange":false,
-      "pageLength":4
-    }
-    );
-});
+  $(document).ready(function () { $('.table').DataTable({ "info":false,
+  "ordering":false, "bLengthChange":false, "pageLength":4 } ); });
 </script>
 <!-- CUSTOM SCRIPTS -->
+<!-- CUSTOM SCRIPTS -->
+
+{{#if errors}}
+  <script id="alert-script" data="{{errors}}">
+    let tag= document.querySelector('#alert-script');
+    console.log(tag.getAttribute('data'));
+    alert(`${tag.getAttribute('data')}`)
+  </script>
+{{/if}}
+
+<script>
+  var uploadField = document.getElementById("file"); var sizeField =
+  document.getElementById("file_size"); uploadField.onchange = function() {
+  sizeField.value = this.files[0].size };
+</script>
+

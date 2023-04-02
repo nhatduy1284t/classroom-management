@@ -22,7 +22,8 @@ import requireAuth from "./middlewares/auth.middleware.js";
 import privilege from "./middlewares/privilege.middleware.js";
 
 //Connect to db
-db();
+let connection = db.getNewDBConnection()
+connection();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -61,15 +62,7 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/test", (req, res) => {
-  res.render("classes");
-  return;
-});
 
-app.post("/", (req, res) => {
-  console.log(req.file);
-  res.send("OK");
-});
 
 app.use("/users", requireAuth, userRoutes);
 app.use("/auth", authRoutes);

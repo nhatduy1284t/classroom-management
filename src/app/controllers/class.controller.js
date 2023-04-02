@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 import Assignment from "../models/Assignment.js";
 import Class from "../models/Class.js";
 import Enrollment from "../models/Enrollment.js";
+import Submission from "../models/Submission.js";
 import User from "../models/User.js";
+import moment from "moment";
 
 var classController = {};
 
@@ -63,12 +65,10 @@ classController.search = async (req, res) => {
 
   const classroom = await Class();
   let matchedClasses = classroom.filter(
-    (aClass) =>
-      aClass.id.toLowerCase().indexOf(q.toLowerCase()) !== -1 ||
-      aClass.class_name.toLowerCase().indexOf(q.toLowerCase()) !== -1
+    (aClass) => aClass.class_name.toLowerCase().indexOf(q.toLowerCase()) !== -1
   );
 
-  res.render("classes/index", {
+  res.render("classes/classes", {
     input: q,
     classes: matchedClasses,
   });
@@ -78,22 +78,44 @@ classController.getClassStudent = async (req, res) => {
   let classId = req.params.id;
   let assignments = await Assignment.find({ class_id: classId }).lean(); //teachers
   let enrollments = await Enrollment.find({ class_id: classId }).lean();
-  
-  let users = enrollments.map(async e => {
-    let userInfo =  await User.findById(e.user_id).lean();
+  let classroom = await Class.findById(classId).lean();
+
+  let users = enrollments.map(async (e) => {
+    let userInfo = await User.findById(e.user_id).lean();
 
     return userInfo;
-  })
+  });
   users = await Promise.all(users);
 
-  let students = users.filter(user => user.user_type == "0")
-  let teachers = users.filter(user => user.user_type == "1")
+  assignments.forEach(async (a) => {
+    let submission = await Submission.findOne({
+      student_id: res.locals.user._id,
+      assignment_id: a._id.toString(),
+    }).lean();
+    
+    a.due_date = moment(a.due_date).format(
+      "dddd, D MMMM YYYY, h:mm A"
+    );
+
+    if (submission && submission.file_url) {
+      a.submitted = true;
+      console.log(a);
+    } else {
+      a.submitted = false;
+    }
+
+  });
+  assignments = await Promise.all(assignments);
+  console.log(assignments);
+  let students = users.filter((user) => user.user_type == "0");
+  let teachers = users.filter((user) => user.user_type == "1");
 
   res.render("classes/detail", {
+    classroom,
     class_id: classId,
     assignments: assignments,
     students,
-    teachers
+    teachers,
   });
 };
 
@@ -102,26 +124,47 @@ classController.getClassTeacher = async (req, res) => {
     let classId = req.params.id;
     let assignments = await Assignment.find({ class_id: classId }).lean(); //teachers
     let enrollments = await Enrollment.find({ class_id: classId }).lean();
+    let classroom = await Class.findById(classId).lean();
 
-
-    let users = enrollments.map(async e => {
-      let userInfo =  await User.findById(e.user_id).lean();
+    let users = enrollments.map(async (e) => {
+      let userInfo = await User.findById(e.user_id).lean();
 
       return userInfo;
-    })
+    });
     users = await Promise.all(users);
 
-    let students = users.filter(user => user.user_type == "0")
-    let teachers = users.filter(user => user.user_type == "1")
+   assignments = assignments.map(async (a) => {
+      let submissions = await Submission.find({
+        assignment_id: a._id.toString(),
+      }).lean();
+
+      a.numOfSubmitted = submissions.filter((s) => s.file_url).length;
+      a.due_date = moment(a.due_date).format(
+        "dddd, D MMMM YYYY, h:mm A"
+      );
+  
+      return a
+    });
+
+    assignments = await Promise.all(assignments);
+
+    let students = users.filter((user) => user.user_type == "0");
+    let teachers = users.filter((user) => user.user_type == "1");
 
     res.render("classes/detail", {
       class_id: classId,
+      classroom,
       assignments: assignments,
       students,
-      teachers
+      teachers,
+      errors: req.app.locals.errors,
+      values: req.app.locals.values,
     });
-
-  } catch (error) {}
+    req.app.locals.errors = [];
+    req.app.locals.values = "";
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 classController.getClass = async (req, res) => {
@@ -133,7 +176,6 @@ classController.getClass = async (req, res) => {
     }
     if (res.locals.user.user_type == "1") {
       //class
-
       classController.getClassTeacher(req, res);
       return;
     }
@@ -186,6 +228,7 @@ classController.getClass = async (req, res) => {
     });
 
     classroom._id = classId;
+
     res.render("classes/assign-class", {
       classroom,
       students: {

@@ -1,7 +1,24 @@
 .user-name {
-    font-weight: 600;
+  font-weight: 600;
 }
 .user-role {
-    font-weight: 600
-    ;
+  font-weight: 600;
+}
+
+.info h5 span {
+  font-weight: 600;
+}
+
+#change-password-form .btn-group {
+  display: flex;
+  justify-content: end;
+}
+
+#change-password-form button {
+
+    border-radius: 4px;
+}
+
+#change-password-form .btn-group button:last-child {
+    margin-left: 10px;
 }

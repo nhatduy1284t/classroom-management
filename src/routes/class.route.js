@@ -2,6 +2,7 @@ import express from "express";
 import assignmentController from "../app/controllers/assignment.controller.js";
 import classController from "../app/controllers/class.controller.js";
 import privilege from "../middlewares/privilege.middleware.js";
+
 const classRouter = express.Router();
 
 // classRouter.post("/assignment/create", assignmentController.createAssignment);

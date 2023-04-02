@@ -16,6 +16,8 @@ assignmentController.getAssignment = async (req, res) => {
   try {
     let assignmentId = req.params.assignmentId;
     let assignment = await Assignment.findById(assignmentId).lean();
+    let currentDate = new Date();
+    let isDueDate = false;
 
     //For student
     let submission = await Submission.findOne({
@@ -35,7 +37,6 @@ assignmentController.getAssignment = async (req, res) => {
     //Get students who haven't submitted homework yet
     let submittedStudentsId = submissions.map((sub) => sub.student_id);
 
-    console.log(studentEnrollments);
     let notSubmittedStudentsId = studentEnrollments.map((s) => {
       if (!submittedStudentsId.includes(s.user_id)) {
         return s.user_id;
@@ -53,6 +54,27 @@ assignmentController.getAssignment = async (req, res) => {
       (student) => student !== null && student.user_type == "0"
     );
 
+    if (currentDate >= assignment.due_date) {
+      isDueDate = true;
+      notSubmissions.forEach(async (student) => {
+        let studentId = student._id.toString();
+
+        let emptySubmission = await Submission.findOne({
+          student_id: studentId,
+        });
+
+        if (emptySubmission) {
+        } else {
+          let eSubmission = Submission({
+            assignment_id: assignmentId,
+            student_id: studentId,
+            grade: 0,
+          });
+
+          let result = await eSubmission.save();
+        }
+      });     
+    }
     //Get students who already submitted homework
     submissions = submissions.map(async (s) => {
       let student = await User.findById(s.student_id).lean();
@@ -66,7 +88,7 @@ assignmentController.getAssignment = async (req, res) => {
       };
     });
     submissions = await Promise.all(submissions);
-    console.log("sadsad", submissions);
+
     assignment.start_date = moment(assignment.start_date).format(
       "dddd, D MMMM YYYY, h:mm A"
     );
@@ -74,26 +96,35 @@ assignmentController.getAssignment = async (req, res) => {
       "dddd, D MMMM YYYY, h:mm A"
     );
 
-    if (submission) {
+    if (submission && submission.file_url) {
       submission.file_name = path.basename(submission.file_url);
     }
-
+    console.log("submittedssssssssss",req.query.dueDateMessage)
     res.render("assignment/detail", {
       assignment,
       submissions,
       submission,
       notSubmissions,
+      isDueDate,
+      dueDateMessage:req.query.dueDateMessage,
+      errors: req.app.locals.errors,
+      
     });
-  } catch (error) {}
+    req.app.locals.errors = [];
+    req.app.locals.values = "";
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
 };
 
 assignmentController.createAssignment = async (req, res) => {
   try {
     // Pass the request object to the multer instance to get access to the file object
     upload.single("file")(req, res, async function (err) {
-      if (err) {
-        return res.status(400).send("Error uploading file");
-      }
+      req.body = req.bodyTemp;
+      req.file = req.fileTemp;
+
       let classId = req.body.class_id;
       let postAssignment = req.body;
 
@@ -104,11 +135,11 @@ assignmentController.createAssignment = async (req, res) => {
         due_date: postAssignment.assignment_due_date,
         teacher_id: res.locals.user._id.toString(),
       });
-      console.log(assignment);
+
       // Access the uploaded file information from the 'req.file' object
       const file = req.file;
 
-      if (file) {
+      if (Object.keys(file).length > 0) {
         // Store in public to send to client
         let folderPath = `src/public/views/assets/assignment/${assignment._id.toString()}`;
         if (!fs.existsSync(folderPath)) {
@@ -137,19 +168,9 @@ assignmentController.createAssignment = async (req, res) => {
       }
       const result = await assignment.save();
       return res.redirect(`/class/${classId}`);
-      // Do any necessary validations with the file
-      // if (!file) {
-      //   return res.status(400).send('No file uploaded!');
-      // }
-      // if (file.size > 1024 * 1024 * 5) {
-      //   return res.status(400).send('File size should be less than 5MB!');
-      // }
-      // if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-      //   return res.status(400).send('Only image files are allowed!');
-      // }
     });
   } catch (error) {
-    console.log(error);
+    console.log("error create assignment", error);
     res.send(error);
   }
 };
@@ -157,14 +178,33 @@ assignmentController.createAssignment = async (req, res) => {
 assignmentController.submitAssignment = async (req, res) => {
   try {
     upload.single("file")(req, res, async function (err) {
-      console.log(req.body);
-      if (err) {
-        return res.status(400).send("Error uploading file");
+      //start validate
+      var errors = [];
+      let currentDate = new Date();
+      let assignment = await Assignment.findById(req.body.assignment_id).lean();
+
+      if (currentDate >= assignment.due_date) {
+        let dueDateMessage = encodeURIComponent("You cannot submit after due date !");     
+        return res.redirect(`/assignment/${req.body.assignment_id}?dueDateMessage=${dueDateMessage}`);
       }
+      
+      if (req.file) {
+        if (req.file.size > 5120000) {
+          errors.push(
+            "File too Big (> 5mb), please select a file less than 5mb"
+          );
+        }
+      }
+
+      if (errors.length) {
+        req.app.locals.errors = errors.join("\n");
+        return res.redirect(`/class/${content.class_id}`);
+      }
+
       let postSubmission = req.body;
       const submission = new Submission({ ...postSubmission });
       const file = req.file;
-      if (file) {
+      if (Object.keys(file).length > 0) {
         // Store file at backend
         let folderPath = `src/public/views/assets/submission/${submission._id.toString()}`;
         if (!fs.existsSync(folderPath)) {
@@ -206,6 +246,13 @@ assignmentController.changeSubmitAssignment = async (req, res) => {
       if (err) {
         return res.status(400).send("Error uploading file");
       }
+      let currentDate = new Date();
+      let assignment = await Assignment.findById(req.body.assignment_id).lean();
+
+      if (currentDate >= assignment.due_date) {
+        let dueDateMessage = encodeURIComponent("You cannot submit after due date !");     
+        return res.redirect(`/assignment/${req.body.assignment_id}?dueDateMessage=${dueDateMessage}`);
+      }
       let postSubmission = req.body;
       const submission = await Submission.findOne({
         assignment_id: postSubmission.assignment_id,
@@ -216,11 +263,10 @@ assignmentController.changeSubmitAssignment = async (req, res) => {
       //Delete old file
       fs.unlink(`src/public/views/assets${oldFileUrl}`, (err) => {
         if (err) throw err;
-        console.log("File deleted!");
       });
       const file = req.file;
       //Write new file
-      if (file) {
+      if (Object.keys(file).length > 0) {
         // Store file at backend
         let folderPath = `src/public/views/assets/submission/${submission._id.toString()}`;
         fs.writeFile(
