@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get("/", controller.index);
 
-
 router.get("/create", privilege, controller.getCreateUser);
 
 const createUserFormValidator = new FormValidator(createUserValidationStrategy);

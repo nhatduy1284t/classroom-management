@@ -9,7 +9,6 @@ assignmentRouter.get("/:assignmentId", assignmentController.getAssignment);
 
 const assignmentFormValidator = new FormValidator(createAssignValidationStrategy);
 assignmentRouter.post("/create", assignmentFormValidator.validateForm(), assignmentController.createAssignment);
-// assignmentRouter.post("/create", assignmentController.createAssignment);
 
 assignmentRouter.post("/submit", assignmentController.submitAssignment);
 assignmentRouter.post("/submit/grade", assignmentController.grade);

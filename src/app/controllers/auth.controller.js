@@ -3,7 +3,7 @@ import md5 from "md5";
 var controller = {};
 
 controller.login = (req, res) => {
-  // const users = await User.find();
+  // const users = await User.find();1
   res.render("auth/signin");
 };
 
@@ -20,13 +20,12 @@ controller.postLogin = async (req, res) => {
   const users = await User.find();
   var user = users.find((user) => user.username == username);
   if (!user) {
-    console.log("user doesn't exist");
+    console.log("User doesn't exist");
     res.render("auth/login", {
       layout: "login",
       errors: ["User does not exist"],
       values: req.body,
     });
-    res.render("auth/login", { layout: "login" });
     return;
   }
 
@@ -36,7 +35,7 @@ controller.postLogin = async (req, res) => {
     console.log("wrong pass");
     res.render("auth/login", {
       layout: "login",
-      errors: ["Wrong password."],
+      errors: ["Wrong password !"],
       values: req.body,
     });
     return;
