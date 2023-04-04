@@ -10,3 +10,4 @@ router.get("/logout", controller.logout);
 router.post("/login", controller.postLogin);
 router.post("/changepassword", controller.changePassword);
 export default router;
+

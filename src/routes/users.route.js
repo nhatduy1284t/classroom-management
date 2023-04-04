@@ -6,7 +6,7 @@ import privilege from "../middlewares/privilege.middleware.js";
 
 const router = express.Router();
 
-router.get("/", controller.index);
+// router.get("/", controller.index);
 
 router.get("/create", privilege, controller.getCreateUser);
 

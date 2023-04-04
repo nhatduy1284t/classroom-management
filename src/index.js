@@ -8,7 +8,8 @@ import Handlebars from "handlebars";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import db from "./db/db.js";
+
+// import db from "./db/db.js";
 
 import userRoutes from "./routes/users.route.js";
 import authRoutes from "./routes/auth.route.js";
@@ -20,10 +21,13 @@ import enrollRoutes from "./routes/enroll.route.js";
 
 import requireAuth from "./middlewares/auth.middleware.js";
 import privilege from "./middlewares/privilege.middleware.js";
+import DatabaseConnection from "./db/db.js";
+
 
 //Connect to db
-let connection = db.getNewDBConnection()
-connection();
+let db = DatabaseConnection.getInstance();
+db.connect();
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

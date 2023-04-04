@@ -1,29 +1,36 @@
-import mongoose from 'mongoose';
+// const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-/* Singleton Design Pattern */
+/**
+ * The Singleton class defines the `getInstance` method that lets clients access
+ * the unique singleton instance.
+ */
 class DatabaseConnection {
-    constructor() {
-        this.database_connection = this.connect
+  constructor() {}
+
+  static getInstance() {
+    if (!DatabaseConnection.instance) {
+      DatabaseConnection.instance = new DatabaseConnection();
+      console.log("AAAA")
     }
-  
-    getNewDBConnection() {
-      return this.database_connection;
+    console.log("BBBB")
+    return DatabaseConnection.instance;
+  }
+
+  /**
+   * Finally, any singleton should define some business logic, which can be
+   * executed on its instance.
+   */
+  async connect() {
+    try {
+      await mongoose.connect("mongodb://localhost:27017/classroommanagement");
+      console.log("Connect successfully!!!");
+    } catch (error) {
+      console.log("Connect failure!!!");
     }
+  }
+}
 
-    async connect() {
-        try {
-            await mongoose.connect("mongodb://localhost:27017/classroommanagement");
-            console.log('Connect successfully!!!'); 
-        } catch (error) {
-            console.log('Connect failure!!!');
-        } 
-    }
-} 
+DatabaseConnection.instance = null;
 
-export default new DatabaseConnection();
-
-/*
-Why does this work? In Node.js, it works because of the module caching system. The module caching system says that "modules are cached after the first time they are loaded" (source - Node.js docs). That means in the second example above, the new instance exported is cached and re-used each time it's required. 
-
-https://daily.dev/blog/the-4-creational-design-patterns-in-node-js-you-should-know
-*/
+export default DatabaseConnection;
