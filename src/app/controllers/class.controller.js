@@ -5,7 +5,7 @@ import Enrollment from "../models/Enrollment.js";
 import Submission from "../models/Submission.js";
 import User from "../models/User.js";
 import moment from "moment";
-
+import { promisify } from "util";
 var classController = {};
 
 classController.createClass = (req, res) => {
@@ -80,6 +80,9 @@ classController.getClassStudent = async (req, res) => {
   let enrollments = await Enrollment.find({ class_id: classId }).lean();
   let classroom = await Class.findById(classId).lean();
 
+  let avgGrade = 0;
+  let numOfGrade = 0;
+
   let users = enrollments.map(async (e) => {
     let userInfo = await User.findById(e.user_id).lean();
 
@@ -92,21 +95,28 @@ classController.getClassStudent = async (req, res) => {
       student_id: res.locals.user._id,
       assignment_id: a._id.toString(),
     }).lean();
-    
-    a.due_date = moment(a.due_date).format(
-      "dddd, D MMMM YYYY, h:mm A"
-    );
+
+    a.due_date = moment(a.due_date).format("dddd, D MMMM YYYY, h:mm A");
 
     if (submission && submission.file_url) {
       a.submitted = true;
-      console.log(a);
+      console.log(submission.grade)
+
     } else {
       a.submitted = false;
     }
 
+    if (submission && submission.grade !== undefined) {
+      avgGrade += submission.grade;
+      numOfGrade += 1;
+      console.log("vao")
+    }
   });
+  await promisify(setTimeout)(50);
+
+  console.log(avgGrade/numOfGrade);
   assignments = await Promise.all(assignments);
-  console.log(assignments);
+
   let students = users.filter((user) => user.user_type == "0");
   let teachers = users.filter((user) => user.user_type == "1");
 
@@ -116,6 +126,7 @@ classController.getClassStudent = async (req, res) => {
     assignments: assignments,
     students,
     teachers,
+    avgGrade:avgGrade/numOfGrade
   });
 };
 
@@ -133,21 +144,19 @@ classController.getClassTeacher = async (req, res) => {
     });
     users = await Promise.all(users);
 
-   assignments = assignments.map(async (a) => {
+    assignments = assignments.map(async (a) => {
       let submissions = await Submission.find({
         assignment_id: a._id.toString(),
       }).lean();
 
       a.numOfSubmitted = submissions.filter((s) => s.file_url).length;
-      a.due_date = moment(a.due_date).format(
-        "dddd, D MMMM YYYY, h:mm A"
-      );
-  
-      return a
+      a.due_date = moment(a.due_date).format("dddd, D MMMM YYYY, h:mm A");
+
+      return a;
     });
 
     assignments = await Promise.all(assignments);
-
+    
     let students = users.filter((user) => user.user_type == "0");
     let teachers = users.filter((user) => user.user_type == "1");
 

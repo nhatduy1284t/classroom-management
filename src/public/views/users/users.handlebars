@@ -1,0 +1,203 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<div class="panel-body">
+  <div
+    class="modal fade"
+    id="myModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="myModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+          >
+            &times;
+          </button>
+          <h4 class="modal-title" id="myModalLabel">User information</h4>
+        </div>
+        <div class="modal-body">
+          <form
+            id="user-info-form"
+            role="form"
+            method="post"
+            action="/users/changeinfo"
+          >
+            <div class="form-group">
+              <label>User name</label>
+              <input
+                id="course-name"
+                class="form-control username"
+                placeholder="PLease enter the class name."
+                name="user_name"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label>First name</label>
+              <input
+                id="course-name"
+                class="form-control firstName"
+                placeholder="PLease enter the class name."
+                name="first_name"
+              />
+            </div>
+            <div class="form-group">
+              <label>Last name</label>
+              <input
+                id="course-name"
+                class="form-control lastName"
+                placeholder="PLease enter the class name."
+                name="last_name"
+              />
+            </div>
+
+            {{!-- <div class="form-group">
+              <label for="type">Type:</label>
+              <select
+                type="type"
+                class="form-control userType"
+                id="type"
+                name="user_type"
+              >
+                {{! <option value=""></option> }}
+                <option value="0" selected>Student</option>
+                <option value="1">Teacher</option>
+                <option value="2">Admin</option>
+              </select>
+            </div> --}}
+            <input type="hidden" name="user_id" class="userId" />
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                Close
+              </button>
+              <button
+                id="create-class-btn"
+                type="submit"
+                class="btn btn-success"
+              >
+                Update
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <!-- Advanced Tables -->
+    <div class="panel panel-default">
+      <div class="panel-heading">List of classes</div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table
+            class="table-users table table-striped table-bordered table-hover display"
+            id="dataTables-example"
+            style="width: 100%"
+          >
+            <thead>
+              <tr>
+                {{! <th>ID</th> }}
+                <th>User name</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>User type</th>
+                <th>Joined date</th>
+                <th>Action</th>
+
+              </tr>
+            </thead>
+
+            <tbody>
+              {{#each users}}
+                <tr>
+                  {{! <th scope="row">123</th> }}
+                  <th scope="row">{{username}}</th>
+                  <td>{{first_name}}</td>
+                  <td>{{last_name}}</td>
+                  <td>
+                    {{#ifEquals user_type "0"}}
+                      Student
+                    {{/ifEquals}}
+                    {{#ifEquals user_type "1"}}
+                      Teacher
+                    {{/ifEquals}}
+                    {{#ifEquals user_type "2"}}
+                      Admin
+                    {{/ifEquals}}
+                  </td>
+                  <td>{{joined_date}}</td>
+                  <td class="btn-list">
+                    <button
+                      class="btn btn-primary btn-md btn-show-info"
+                      data-toggle="modal"
+                      data-target="#myModal"
+                      data-userName="{{username}}"
+                      data-userType="{{user_type}}"
+                      data-lastName="{{last_name}}"
+                      data-firstName="{{first_name}}"
+                      data-userId={{_id}}
+                    >
+                      <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <form action="users/delete" method="post">
+                    <input name="user_id" type="hidden" value="{{_id}}">
+                      <button class="btn btn-danger btn-delete-user" data-userId="_id" type="button">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </button>
+                    </form>
+
+                  </td>
+
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--End Advanced Tables -->
+  </div>
+</div>
+
+<script src="/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="/js/jquery.metisMenu.js"></script>
+
+<!-- DATATABLES -->
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="/js/dataTables/jquery.dataTables.js"></script>
+<script src="/js/dataTables/dataTables.bootstrap.js"></script>
+
+<script src="/js/users.js"></script>
+
+<style>
+    .btn-list {
+        display:flex;
+
+    }
+        .btn-danger {
+        margin-left: 3px;
+
+    }
+</style>

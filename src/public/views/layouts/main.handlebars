@@ -43,12 +43,15 @@ font-size: 16px;"> {{user.username}} &nbsp; <a href="/auth/logout" class="btn bt
                 		
                     <li>
                         {{!-- <a class="active-menu"  href="/home"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a> --}}
-                        <a class=""  href="/home"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                        <a class=""  href="/home"><i class="fa fa-dashboard fa-3x"></i> Information</a>
                     </li>
 
                     {{#ifEquals user.user_type "2"}}
                      <li>
-                        <a  href="/users/create"><i class="fa fa-desktop fa-3x"></i>Create Account</a>
+                        <a  href="/users/create"><i class="fa fa-user fa-3x"></i>Create Account</a>
+                    </li>
+                     <li>
+                        <a  href="/users"><i class="fa fa-user fa-3x"></i>Users</a>
                     </li>
                     {{/ifEquals}}
                     <li>

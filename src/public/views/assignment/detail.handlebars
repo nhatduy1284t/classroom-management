@@ -249,7 +249,15 @@ if (btnGrades) {
 
     let messageTag = document.querySelector('.due-date-message-script');
     alert(messageTag.getAttribute('data'));
-    
+        window.location.replace(window.location.origin + window.location.pathname);
+
+  </script>
+  {{/if}}
+  {{#if message}}
+  <script class="message-script" data="{{message}}">
+    let messageTag = document.querySelector('.message-script');
+    alert(messageTag.getAttribute('data'));
+    window.location.replace(window.location.origin + window.location.pathname);
   </script>
   {{/if}}
 {{/ifEquals}}
